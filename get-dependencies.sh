@@ -16,9 +16,9 @@ fi
 [ ! -d $rolesdir/kbrebanov.java ] && git clone https://github.com/juju4/ansible-java $rolesdir/kbrebanov.java
 #[ ! -d $rolesdir/kbrebanov.jira ] && git clone https://github.com/kbrebanov/ansible-jira $rolesdir/kbrebanov.jira
 [ ! -d $rolesdir/kbrebanov.jira ] && git clone https://github.com/juju4/ansible-jira $rolesdir/kbrebanov.jira
-[ ! -d $rolesdir/geerlingguy.java ] && git clone https://github.com/geerlingguy/ansible-java $rolesdir/geerlingguy.java
-[ ! -d $rolesdir/geerlingguy.postgresql ] && git clone https://github.com/geerlingguy/ansible-postgresql $rolesdir/geerlingguy.postgresql
-[ ! -d $rolesdir/geerlingguy.apache ] && git clone https://github.com/geerlingguy/ansible-apache $rolesdir/geerlingguy.apache
+[ ! -d $rolesdir/geerlingguy.java ] && git clone https://github.com/geerlingguy/ansible-role-java $rolesdir/geerlingguy.java
+[ ! -d $rolesdir/geerlingguy.postgresql ] && git clone https://github.com/geerlingguy/ansible-role-postgresql $rolesdir/geerlingguy.postgresql
+[ ! -d $rolesdir/geerlingguy.apache ] && git clone https://github.com/geerlingguy/ansible-role-apache $rolesdir/geerlingguy.apache
 [ ! -d $rolesdir/cmprescott.xml ] && git clone https://github.com/cmprescott/ansible-xml $rolesdir/cmprescott.xml
 
 ## galaxy naming: kitchen fails to transfer symlink folder
