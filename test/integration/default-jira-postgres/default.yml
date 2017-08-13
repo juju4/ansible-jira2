@@ -1,0 +1,28 @@
+---
+
+- hosts: all
+  vars:
+    - jira_reverseproxy: false
+    - jira_dbbackend: postgres
+    # geerlingguy.apache
+    - apache_mods_enabled:
+      - rewrite.load
+      - ssl.load
+      - proxy.load
+      - proxy_http.load
+      - remoteip.load
+      - ratelimit.load
+    - apache_create_vhosts: false
+    - apache_remove_default_vhost: true
+    # geerlingguy.postgresql
+    - postgresql_databases:
+      - name: "{{ jira_db }}"
+        lc_collate: 'C.UTF-8'
+    - postgresql_users:
+      - name: "{{ jira_db_user }}"
+        password: "{{ jira_db_userpass }}"
+        priv: # defaults to not set
+        db: "{{ jira_db }}"
+  roles:
+    - geerlingguy.postgresql
+    - juju4.jira2

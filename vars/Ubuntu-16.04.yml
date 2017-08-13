@@ -1,0 +1,4 @@
+---
+
+apache_confdir: /etc/apache2/conf-available
+apache_sitedir: /etc/apache2/sites-available

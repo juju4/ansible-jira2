@@ -1,0 +1,94 @@
+---
+## https://confluence.atlassian.com/adminjiraserver071/running-jira-applications-over-ssl-or-https-802593051.html
+## http://docs.oracle.com/javase/1.5.0/docs/tooldocs/solaris/keytool.html
+
+- name: Upload certificates files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ jira_installdir }}/conf/{{ item | basename }}"
+    mode: '0400'
+    backup: yes
+  with_items: "{{ jira_https_files_to_upload }}"
+
+- name: Create keystore
+  command: "keytool -genkey -alias jira -keyalg RSA -keystore {{ jira_keystore }} -storepass {{ jira_keystore_pass }} -validity 360 -keysize 2048"
+  args:
+    creates: "{{ jira_keystore }}"
+
+- block:
+    - name: Create CSR
+      command: "keytool -certreq -keyalg RSA -alias jira -keystore {{ jira_keystore }} -storepass {{ jira_keystore_pass }} -file {{ jira_https_csr }} -dname {{ jira_https_dname }} -noprompt"
+      args:
+        creates: "{{ jira_https_csr }}"
+
+    - name: Check if have root certificate
+      stat: path="{{ jira_https_rootcert }}"
+      register: rootcert
+    - name: Import root certificate
+      command: "keytool -import -alias rootCA -keystore {{ jira_keystore }} -storepass {{ jira_keystore_pass }} -trustcacerts -file {{ jira_https_rootcert }}"
+      when: rootcert.stat.exists
+
+    - name: Check if have signed certificate
+      stat: path="{{ jira_https_crt }}"
+      register: crt
+    - name: Import signed certificate
+      command: "keytool -import -alias jira -keystore {{ jira_keystore }} -storepass {{ jira_keystore_pass }} -file {{ jira_https_crt }}"
+      when: crt.stat.exists
+  when: jira_https_files_to_upload != []
+
+- block:
+    - name: Generating self-signed certificate
+      command: "keytool -selfcert -keyalg RSA -alias jira -keystore {{ jira_keystore }} -storepass {{ jira_keystore_pass }} -file {{ jira_https_csr }} -dname {{ jira_https_dname }} -noprompt"
+      args:
+        creates: "{{ jira_https_csr }}"
+  when: jira_https_files_to_upload == []
+
+- name: Verify the certificate exists within the keystore
+  shell: "keytool -list -alias jira -keystore {{ jira_keystore }} -storepass {{ jira_keystore_pass }} | grep PrivateKeyEntry"
+  changed_when: false
+  register: keytoolcheck
+- debug: var=keytoolcheck.stdout_lines
+
+- name: Ensure python-lxml is present
+  package:
+    name: python-lxml
+    state: present
+
+## FIXME! want to have Connector 8443 but keep Connector 8080
+##  "Can't process Xpath ./@port=8443 in order to spawn nodes! tree is <Connector/>\n"
+- name: Jira https | Update tomcat configuration
+  xml:
+    path: /opt/atlassian/jira/current/conf/server.xml
+    xpath: "/Server/Service/Connector[@port=8443]"
+    state: present
+    attribute: "{{ item.attr }}"
+    value: "{{ item.val }}"
+#    backup: yes
+  with_items:
+    - { attr: 'protocol', val: 'org.apache.coyote.http11.Http11NioProtocol' }
+    - { attr: 'maxHttpHeaderSize', val: '8192' }
+    - { attr: 'SSLEnabled', val: 'true' }
+    - { attr: 'scheme', val: 'https' }
+    - { attr: 'secure', val: 'true' }
+    - { attr: 'clientAuth', val: 'false' }
+    - { attr: 'sslProtocol', val: 'TLS' }
+    - { attr: 'keystoreFile', val: "{{ jira_keystore }}" }
+    - { attr: 'keystorePass', val: "{{ jira_keystore_pass }}" }
+    - { attr: 'keystoreType', val: 'JKS' }
+    - { attr: 'maxThreads', val: '150' }
+    - { attr: 'minSpareThreads', val: '25' }
+    - { attr: 'enableLookups', val: 'false' }
+    - { attr: 'disableUploadTimeout', val: 'true' }
+    - { attr: 'acceptCount', val: '100' }
+
+- name: Jira https | Update tomcat configuration
+  xml:
+    path: /opt/atlassian/jira/current/conf/server.xml
+    xpath: "/Server/Service/Connector[@port=8080]"
+    state: present
+    attribute: "{{ item.attr }}"
+    value: "{{ item.val }}"
+#    backup: yes
+  with_items:
+    - { attr: 'redirectPort', val: '8443' }
+

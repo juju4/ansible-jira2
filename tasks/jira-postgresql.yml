@@ -1,0 +1,18 @@
+---
+## https://confluence.atlassian.com/jira/connecting-jira-to-postgresql-185729433.html
+## https://confluence.atlassian.com/jira/supported-platforms-207488170.html     Officially up to 9.3
+
+- name: Configure postgresql backend with template
+  template:
+    src: dbconfig.xml.j2
+    dest: "{{ jira_homedir }}/dbconfig.xml"
+    mode: '0400'
+    owner: jira
+    backup: yes
+  register: p1
+
+- name: Restart Jira
+  service:
+    name: jira
+    state: restarted
+  when: p1.changed

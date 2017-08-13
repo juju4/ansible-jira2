@@ -1,0 +1,24 @@
+# from https://confluence.atlassian.com/kb/proxying-atlassian-server-applications-with-apache-http-server-mod_proxy_http-806032611.html
+<VirtualHost *:{{ jira_port }}>
+    ServerName {{ jira_dns_servername }}
+     
+    ProxyRequests Off
+    ProxyVia Off
+     
+    <Proxy *>
+         Require all granted
+    </Proxy>
+ 
+    ProxyPass {{ jira_contextpath | default('/') }} http://{{ jira_int_servername }}:{{ jira_int_port }}{{ jira_contextpath | default('/') }}
+    ProxyPassReverse {{ jira_contextpath | default('/') }} http://{{ jira_int_servername }}:{{ jira_int_port }}{{ jira_contextpath | default('/') }}
+
+    # Ensure origin IP address is kept
+    RemoteIPHeader X-Forwarded-For
+
+{% if jira_port == 443 %}
+    SSLEngine on
+    SSLCertificateFile {{ ssl_dir }}/{{ ansible_fqdn }}.crt
+    SSLCertificateKeyFile {{ ssl_privatedir }}/{{ ansible_fqdn }}.key
+    Include /etc/apache2/harden-apache2-https.conf
+{% endif %}
+</VirtualHost>

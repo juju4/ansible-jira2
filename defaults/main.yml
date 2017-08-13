@@ -1,0 +1,84 @@
+---
+
+jira_installdir: '/opt/atlassian/jira/current'
+jira_homedir: '/var/atlassian/application-data/jira'
+
+jira_reverseproxy: true
+
+## This is jira internal https. You probably don't need it if using reverse-proxy on same box.
+jira_https: false
+jira_keystore: "{{ jira_installdir }}/conf/jira.jks"
+## not ideal, either stdin, either argument
+jira_keystore_pass: jks_pass_to_change
+## if not existing, self-signed certificate will be created
+jira_https_files_to_upload: []
+#jira_https_files_to_upload:
+#  - jira.csr
+#  - jira.crt
+#  - root.crt
+jira_https_csr: "{{ jira_installdir }}/conf/jira.csr"
+jira_https_crt: "{{ jira_installdir }}/conf/jira.crt"
+jira_https_rootcert: "{{ jira_installdir }}/conf/root.crt"
+jira_https_dname: "CN=jira.dev,OU=Dev,O=MyCompany,L=MyCity,S=MyState,C=MyCountryCode"
+
+## reverse-proxy
+jira_dns_servername: jira.local
+jira_port: 80
+#jira_port: 443
+
+## jira instance for reverse proxy
+#jira_context_path: "/jira"
+jira_int_servername: localhost
+jira_int_port: 8080
+
+## database (postgresql)
+#jira_dbbackend: 'postgres'
+jira_db: jiradb
+jira_db_user: jiradbuser
+jira_db_userpass: jiradbuserpass
+jira_jdbc_url: "jdbc:postgresql://localhost:5432/{{ jira_db }}"
+
+## ActiveDirectory link?
+jira_link_activedirectory: false
+jira_activedirectory_servercrt: server-certificate.crt
+
+backupdir: /var/_backup
+scriptsdir: /usr/local/scripts
+
+## firewall ?
+#jira_ufw: false
+jira_ufw: true
+jira_ufw_if: eth0
+#jira_ufw_if: enp0s3
+## only affect incoming traffic
+#jira_ufw_default_policy: allow
+jira_ufw_default_policy: deny
+jira_ufw_default_logging: medium
+jira_ufw_access:
+  - 10.0.0.0/8
+  - 172.16.0.0/12
+  - 192.168.0.0/16
+jira_ufw_access_with_log: []
+jira_ufw_allow_ports_in:
+  - 22
+jira_ufw_out_logging: no
+jira_ufw_allow_ports_out:
+  - 22
+#  - 25
+  - 53
+  - 123
+## email/TLS?
+  - 587
+## web
+#  - 80
+#  - 443
+#  - 8080
+## using dhcp?
+#  - 67
+
+## docker, lxc? (else dhclient will fail ...)
+jira_ufw_allow_if_out: []
+
+## if you have vpn interface that should be present before? tun0....
+jira_ufw_vpn: []
+

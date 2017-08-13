@@ -1,0 +1,8 @@
+---
+
+- hosts: all
+  vars:
+    - jira_reverseproxy: false
+    - jira_https: true
+  roles:
+    - juju4.jira2

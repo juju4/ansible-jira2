@@ -1,0 +1,74 @@
+---
+
+- include: logging.yml
+
+- name: install ufw
+  package: name=ufw state=present
+
+- name: ufw | ensure logging medium is enabled
+  ufw: logging={{ jira_ufw_default_logging }}
+
+- name: ufw | always allow ssh
+  ufw: rule=allow name=OpenSSH log=yes
+
+- name: ufw | allow access from defined networks
+  ufw: rule=allow src={{ item }}
+  with_items: "{{ jira_ufw_access }}"
+
+- name: ufw | allow access from defined networks - with logging
+  ufw: rule=allow src={{ item }} log=yes
+  with_items: "{{ jira_ufw_access_with_log }}"
+
+- name: ufw | allow incoming traffic for defined ports
+  ufw:
+    rule: allow
+    interface: "{{ jira_ufw_if }}"
+    direction: in
+    to_port: "{{ item }}"
+  with_items: "{{ jira_ufw_allow_ports_in }}"
+
+- name: ufw | allow {{ jira_ufw_if }} outgoing traffic for defined ports
+  ufw:
+    rule: allow
+    interface: "{{ jira_ufw_if }}"
+    direction: out
+    to_port: "{{ item }}"
+    log: "{{ jira_ufw_out_logging }}"
+  with_items: "{{ jira_ufw_allow_ports_out }}"
+
+- name: ufw | allow all outgoing traffic for defined interfaces
+  ufw: rule=allow interface={{ item }} direction=out
+  with_items: "{{ jira_ufw_allow_if_out }}"
+
+## FIXME! ansible module only affect incoming traffic, not idempotent
+## Note: keep last, especially if you block by default
+- name: ufw | default policy (incoming)
+  ufw: state=enabled policy={{ jira_ufw_default_policy }} log=yes
+- name: ufw | check current status
+  command: "ufw status verbose"
+  register: ufwstatus
+  changed_when: false
+- name: ufw | default policy (outgoing)
+  command: "ufw default {{ jira_ufw_default_policy }} outgoing"
+  when: "'{{ jira_ufw_default_policy }} (outgoing)' not in ufwstatus.stdout"
+
+- block:
+    - name: check if custom ufw.service file
+      stat: path=/etc/systemd/system/ufw.service
+      register: svc
+    - name: creating custom ufw.service
+      copy:
+        src: /lib/systemd/system/ufw.service
+        dest: /etc/systemd/system/ufw.service
+        remote_src: true
+    - set_fact:
+        systemd_string: "{% for i in jira_ufw_vpn %}sys-devices-virtual-net-{{ i }}.device {% endfor %}"
+    - name: ensure vpn interface are presents in ufw.service
+      lineinfile:
+        dest: /etc/systemd/system/ufw.service
+        line: "{{ item }}"
+        insertafter: 'Before=network.target'
+      with_items:
+        - "Wants={{ systemd_string }}"
+        - "After={{ systemd_string }}"
+  when: jira_ufw_vpn is defined and jira_ufw_vpn != []

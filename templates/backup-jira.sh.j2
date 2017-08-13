@@ -1,0 +1,24 @@
+#!/bin/sh
+## backup script for jira
+## https://confluence.atlassian.com/adminjiraserver071/backing-up-data-802592964.html
+
+export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+umask 022
+
+date=`date +%Y-%m-%d`
+dest={{ backupdir }}
+[ ! -d "$dest" ] && install -d -m 0700 -o root "$dest"
+destfile=$dest/backup-jira-$date.tar.gz
+
+dirs="{{ jira_homedir }}/data/attachments {{ jira_homedir }}/dbconfig.xml {{ jira_homedir }}/jira-config.properties {{ jira_homedir }}/log"
+{% if jira_db_database is defined and jira_db_database != '' %}
+sudo -u postgres pg_dump "{{ jira_db_database }}" > $dest/pg_dump-jira.sql
+{% endif %}
+
+tar czf $destfile $dirs $dest/pg_dump-jira.sql
+{% if jira_db_database is defined and jira_db_database != '' %}
+rm $dest/pg_dump-jira.sql
+{% endif %}
+
+tar tzf $destfile > /dev/null
+openssl dgst -sha512 $destfile > $destfile.distinfo

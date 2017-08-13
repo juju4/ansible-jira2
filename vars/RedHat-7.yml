@@ -1,0 +1,4 @@
+---
+
+apache_confdir: /etc/httpd/conf.d
+apache_sitedir: /etc/httpd/conf.d

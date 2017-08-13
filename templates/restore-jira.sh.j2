@@ -1,0 +1,31 @@
+#!/bin/sh
+## restore script for jira
+## https://confluence.atlassian.com/adminjiraserver071/restoring-data-from-an-xml-backup-802592998.html
+
+export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+umask 022
+
+if [ $# -gt 1 -a -r "$1" ]; then
+    backupfile=$1
+else
+    backupfile={{ backupdir }}/backup-jira.tar.gz
+fi
+
+tmpdir=`mktemp -d /tmp/restore.XXXXXX || exit 1`
+dirs="{{ jira_homedir }}/data/attachments {{ jira_homedir }}/dbconfig.xml {{ jira_homedir }}/jira-config.properties {{ jira_homedir }}/log"
+
+tar xzf $backupfile -C $tmpdir
+
+# Before restoring, Disable email sending/receiving if activated
+/etc/init.d/jira stop
+
+{% if jira_db_database is defined and jira_db_database != '' %}
+sudo -u postgres psql --set ON_ERROR_STOP=on -f $tmpdir{{ backupdir }}/pg_dump-jira.sql "{{ jira_db_database }}"
+sudo -u postgres vacuumdb --dbname="{{ jira_db_database }}" --analyze --verbose
+
+{% endif %}
+for d in $dirs; do
+    rsync -rvl $tmpdir/$d $d
+done
+
+/etc/init.d/jira start

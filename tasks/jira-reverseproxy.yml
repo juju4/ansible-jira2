@@ -1,0 +1,53 @@
+---
+## https://confluence.atlassian.com/kb/proxying-atlassian-server-applications-with-apache-http-server-mod_proxy_http-806032611.html
+
+- name: Ensure python-lxml is present
+  package:
+    name: python-lxml
+    state: present
+
+- name: check if have a jira server.xml backup
+  stat: path="{{ jira_installdir }}/conf/server.xml.orig"
+  register: backup
+- name: backup jira server.xml
+  copy:
+    src: "{{ jira_installdir }}/conf/server.xml"
+    dest: "{{ jira_installdir }}/conf/server.xml.orig"
+    mode: '0400'
+    remote_src: true
+  when: not backup.stat.exists
+
+- name: Reverse Proxy | Update jira context path
+  xml:
+    path: "{{ jira_installdir }}/conf/server.xml"
+    xpath: /Server/Service/Engine/Host/Context
+    state: present
+    attribute: path
+    value: "{{ jira_context_path | default('/') }}"
+#    backup: yes
+
+- name: setup jira reverse-proxy configuration
+  template:
+    src: apache-jira.conf.j2
+    dest: "{{ apache_sitedir }}/jira-vhost.conf"
+    mode: '0644'
+    backup: yes
+  notify:
+    - restart apache
+- name: Debian | enable jira configuration
+  file:
+    src: "{{ apache_sitedir }}/jira-vhost.conf"
+    dest: "/etc/apache2/sites-enabled/jira-vhost.conf"
+    state: link
+  notify:
+    - restart apache
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: RedHat | Allow apache to connect to network (selinux)
+  seboolean:
+    name: httpd_can_network_connect
+    state: yes
+    persistent: yes
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
+
+#- name: Disable HTTP compression in Jira - GUI only???
