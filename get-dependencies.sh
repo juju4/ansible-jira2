@@ -22,8 +22,8 @@ fi
 [ ! -d $rolesdir/cmprescott.xml ] && git clone https://github.com/cmprescott/ansible-xml $rolesdir/cmprescott.xml
 
 ## galaxy naming: kitchen fails to transfer symlink folder
-#[ ! -e $rolesdir/juju4.jira ] && ln -s ansible-jira $rolesdir/juju4.jira
-[ ! -e $rolesdir/juju4.jira ] && cp -R $rolesdir/ansible-jira $rolesdir/juju4.jira
+#[ ! -e $rolesdir/juju4.jira2 ] && ln -s ansible-jira2 $rolesdir/juju4.jira2
+[ ! -e $rolesdir/juju4.jira2 ] && cp -R $rolesdir/ansible-jira2 $rolesdir/juju4.jira2
 
 ## don't stop build on this script return code
 true
