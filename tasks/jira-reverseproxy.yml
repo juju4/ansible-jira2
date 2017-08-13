@@ -25,6 +25,8 @@
     attribute: path
     value: "{{ jira_context_path | default('/') }}"
 #    backup: yes
+  notify:
+    - restart jira
 
 - name: setup jira reverse-proxy configuration
   template:
