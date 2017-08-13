@@ -33,12 +33,12 @@ env:
   - distribution: ubuntu
     version: 16.04
     suite: 'default-jira-reverseproxy-https'
-  - distribution: centos
-    version: 7
-    suite: 'default-jira-keystore'
-  - distribution: ubuntu
-    version: 16.04
-    suite: 'default-jira-keystore'
+#  - distribution: centos
+#    version: 7
+#    suite: 'default-jira-keystore'
+#  - distribution: ubuntu
+#    version: 16.04
+#    suite: 'default-jira-keystore'
   - distribution: centos
     version: 7
     suite: 'default-jira-postgres'
