@@ -10,6 +10,8 @@ This role is a meta role to setup Jira in a sane and secure environment. Using
 - juju4.harden-apache
 + backup scripts
 + firewalling with ufw
+(optional)
+- juju4.smarthostclient
 
 ## Requirements & Dependencies
 

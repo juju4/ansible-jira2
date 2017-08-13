@@ -25,5 +25,4 @@ galaxy_info:
   - development
 dependencies:
   - kbrebanov.jira
-  - juju4.smarthostclient
   - cmprescott.xml
