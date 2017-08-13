@@ -23,28 +23,28 @@ env:
 #    version: 8
   - distribution: centos
     version: 7
-    suite: 'default-reverseproxy'
+    suite: 'default-jira-reverseproxy'
   - distribution: ubuntu
     version: 16.04
-    suite: 'default-reverseproxy'
+    suite: 'default-jira-reverseproxy'
   - distribution: centos
     version: 7
-    suite: 'default-reverseproxy-https'
+    suite: 'default-jira-reverseproxy-https'
   - distribution: ubuntu
     version: 16.04
-    suite: 'default-reverseproxy-https'
+    suite: 'default-jira-reverseproxy-https'
   - distribution: centos
     version: 7
-    suite: 'default-keystore'
+    suite: 'default-jira-keystore'
   - distribution: ubuntu
     version: 16.04
-    suite: 'default-keystore'
+    suite: 'default-jira-keystore'
   - distribution: centos
     version: 7
-    suite: 'default-postgres'
+    suite: 'default-jira-postgres'
   - distribution: ubuntu
     version: 16.04
-    suite: 'default-postgres'
+    suite: 'default-jira-postgres'
 
 before_install:
   - env
