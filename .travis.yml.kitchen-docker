@@ -18,9 +18,9 @@ env:
 #  - distribution: ubuntu
 #    version: 12.04
 #  - distribution: alpine
-#    version: 3.4
+#    version: 3.6
 #  - distribution: debian
-#    version: 8
+#    version: 9
   - distribution: centos
     version: 7
     suite: 'default-jira-reverseproxy'

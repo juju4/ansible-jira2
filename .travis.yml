@@ -1,78 +1,117 @@
 ---
-dist: trusty
+## from https://github.com/geerlingguy/ansible-role-apache/blob/master/.travis.yml
 sudo: required
-rvm:
-  - 2.4
 
 env:
 #  - distribution: centos
 #    version: 6
+#    init: /sbin/init
+#    run_opts: ""
   - distribution: centos
     version: 7
-    suite: 'default'
+    init: /usr/lib/systemd/systemd
+    run_opts: "'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'"
+    suite: default
   - distribution: ubuntu
     version: 16.04
-    suite: 'default'
+    init: /lib/systemd/systemd
+    run_opts: "'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'"
+    suite: default
 #  - distribution: ubuntu
 #    version: 14.04
+#    init: /sbin/init
+#    run_opts: ""
 #  - distribution: ubuntu
 #    version: 12.04
+#    init: /sbin/init
+#    run_opts: ""
 #  - distribution: alpine
-#    version: 3.4
+#    version: 3.6
+#    init: /sbin/init
+#    run_opts: ""
 #  - distribution: debian
-#    version: 8
+#    version: 9
+#    init: /lib/systemd/systemd
+#    run_opts: "'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'"
   - distribution: centos
     version: 7
-    suite: 'default-jira-reverseproxy'
+    init: /usr/lib/systemd/systemd
+    run_opts: "'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'"
+    suite: default-jira-reverseproxy
   - distribution: ubuntu
     version: 16.04
-    suite: 'default-jira-reverseproxy'
+    init: /lib/systemd/systemd
+    run_opts: "'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'"
+    suite: default-jira-reverseproxy
   - distribution: centos
     version: 7
-    suite: 'default-jira-reverseproxy-https'
+    init: /usr/lib/systemd/systemd
+    run_opts: "'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'"
+    suite: default-jira-reverseproxy-https
   - distribution: ubuntu
     version: 16.04
-    suite: 'default-jira-reverseproxy-https'
-#  - distribution: centos
-#    version: 7
-#    suite: 'default-jira-keystore'
-#  - distribution: ubuntu
-#    version: 16.04
-#    suite: 'default-jira-keystore'
+    init: /lib/systemd/systemd
+    run_opts: "'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'"
+    suite: default-jira-reverseproxy-https
   - distribution: centos
     version: 7
-    suite: 'default-jira-postgres'
+    init: /usr/lib/systemd/systemd
+    run_opts: "'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'"
+    suite: default-jira-postgres
   - distribution: ubuntu
     version: 16.04
-    suite: 'default-jira-postgres'
+    init: /lib/systemd/systemd
+    run_opts: "'--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'"
+    suite: default-jira-postgres
+
+services:
+  - docker
 
 before_install:
+  # - sudo apt-get update
+  - docker --version
+  # Pull container
+  - 'docker pull ${distribution}:${version}'
   - env
   - pwd
   - find -ls
-## use appropriate role path and not github name
   - "[ -f get-dependencies.sh ] && sh -x get-dependencies.sh"
-  - sudo pip install ansible
-## need to use chef gem for some reason? BAD PATH https://github.com/chef/chef-dk/issues/15
-#  - chef gem install kitchen
-  - gem install kitchen
-  - gem install kitchen-ansible
-  - gem install kitchen-sync
-  - gem install kitchen-docker
-  - gem list
-  - which kitchen
-  - KITCHEN_YAML=.kitchen.docker.yml kitchen diagnose --all
+  - cp test/travis/initctl_faker test/
+  # Customize container
+  - 'docker build --rm=true --file=test/travis/Dockerfile.${distribution}-${version} --tag=${distribution}-${version}:ansible test'
 
 script:
-## avoid locale issue under xenial docker, https://github.com/pypa/pip/issues/3575
-  - export LC_ALL=C.UTF-8
-  - export LANG=C.UTF-8
-  - KITCHEN_YAML=.kitchen.docker.yml kitchen verify ${suite}-${distribution}-${version//./}
+  - container_id=$(mktemp)
+    # Run container in detached state
+  - 'docker run --detach --volume="${PWD%/*}":/etc/ansible/roles:ro ${run_opts} ${distribution}-${version}:ansible "${init}" > "${container_id}"'
 
-#after_failure:
-#  - "systemctl -l status"
-#  - "journalctl -xe --no-pager"
+  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible --version'
+
+  # Ansible syntax check.
+  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/juju4.jira2/test/integration/${suite}/default.yml --syntax-check'
+
+  # Test role.
+  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/juju4.jira2/test/integration/${suite}/default.yml -vv'
+
+  # Test role idempotence.
+  - >
+    docker exec "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/juju4.jira2/test/integration/${suite}/default.yml
+    | tee /tmp/idempotency.log
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && cat /tmp/idempotency.log && exit 1)
+
+  # serverspec tests
+## travis/docker: Errno::EROFS: Read-only file system @ dir_s_mkdir - /etc/ansible/roles/juju4.jira2/test/integration/${suite}/serverspec/.bundle
+#  - 'sudo docker exec --tty "$(cat ${container_id})" /etc/ansible/roles/juju4.jira2/test/integration/${suite}/serverspec/run-local-tests.sh'
+
+  # Clean up
+  - 'sudo docker stop "$(cat ${container_id})"'
+
+after_failure:
+  # Check what happened on systemd systems.
+  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm systemctl -l status'
+  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm journalctl -xe --no-pager'
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
-
