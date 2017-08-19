@@ -79,6 +79,8 @@ $ packer build -only=digitalocean packer-*.json
 
 ## Troubleshooting & Known issues
 
+* JIRA recommends C.UTF-8, POSIX.UTF-8 or C for postgres lc_collate per https://confluence.atlassian.com/jirakb/how-to-fix-the-collation-of-a-postgres-jira-database-776657961.html.
+C.UTF-8 is fine on Ubuntu but not on RedHat, so using customized role manala.locales to configure POSIX.UTF-8 on both.
 
 ## License
 
