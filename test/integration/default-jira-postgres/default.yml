@@ -17,7 +17,7 @@
     # geerlingguy.postgresql
     - postgresql_databases:
       - name: "{{ jira_db }}"
-        lc_collate: 'C.UTF-8'
+        lc_collate: 'POSIX.UTF-8'
     - postgresql_users:
       - name: "{{ jira_db_user }}"
         password: "{{ jira_db_userpass }}"
