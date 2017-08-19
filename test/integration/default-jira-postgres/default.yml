@@ -31,6 +31,6 @@
       - { input: en_US, charmap: UTF-8 }
       - { input: POSIX, charmap: UTF-8 }
   roles:
-    - { role: manala.locales, when: ansible_os_family == "RedHat" }
+    - manala.locales
     - geerlingguy.postgresql
     - juju4.jira2
