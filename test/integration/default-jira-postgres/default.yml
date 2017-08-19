@@ -23,10 +23,10 @@
         password: "{{ jira_db_userpass }}"
         priv: # defaults to not set
         db: "{{ jira_db }}"
-    # manala.locales for centos
-    - manala_locales_codes_default: C.UTF-8
+    # manala.locales for centos (Ubuntu)
+#    - manala_locales_codes_default: C.UTF-8
     - manala_locales_codes:
-      - { input: C, charmap: UTF-8 }
+#      - { input: C, charmap: UTF-8 }
       - { input: en_US, charmap: UTF-8 }
 #      - { input: POSIX, charmap: UTF-8 }
   pre_tasks:
