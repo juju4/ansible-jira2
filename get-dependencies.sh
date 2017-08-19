@@ -20,6 +20,8 @@ fi
 [ ! -d $rolesdir/geerlingguy.postgresql ] && git clone https://github.com/geerlingguy/ansible-role-postgresql $rolesdir/geerlingguy.postgresql
 [ ! -d $rolesdir/geerlingguy.apache ] && git clone https://github.com/geerlingguy/ansible-role-apache $rolesdir/geerlingguy.apache
 [ ! -d $rolesdir/cmprescott.xml ] && git clone https://github.com/cmprescott/ansible-xml $rolesdir/cmprescott.xml
+#[ ! -d $rolesdir/manala.locales ] && git clone https://github.com/manala/ansible-role-locales $rolesdir/manala.locales
+[ ! -d $rolesdir/manala.locales ] && git clone https://github.com/juju4/ansible-roles-1.git $rolesdir/manala-roles && cp -R $rolesdir/manala-roles/manala.locales $rolesdir/manala.locales
 
 ## galaxy naming: kitchen fails to transfer symlink folder
 #[ ! -e $rolesdir/juju4.jira2 ] && ln -s ansible-jira2 $rolesdir/juju4.jira2

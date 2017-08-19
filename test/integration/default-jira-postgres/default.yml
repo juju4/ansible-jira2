@@ -23,6 +23,14 @@
         password: "{{ jira_db_userpass }}"
         priv: # defaults to not set
         db: "{{ jira_db }}"
+    # manala.locales for centos
+    - manala_locales_codes_default: POSIX.UTF-8
+    - manala_locales_codes:
+## cannot open locale definition file `C': No such file or directory
+#      - { input: C, charmap: UTF-8 }
+      - { input: en_US, charmap: UTF-8 }
+      - { input: POSIX, charmap: UTF-8 }
   roles:
+    - { role: manala.locales, when: ansible_os_family == "RedHat" }
     - geerlingguy.postgresql
     - juju4.jira2
