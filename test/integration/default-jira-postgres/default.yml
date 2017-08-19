@@ -17,19 +17,30 @@
     # geerlingguy.postgresql
     - postgresql_databases:
       - name: "{{ jira_db }}"
-        lc_collate: 'POSIX.UTF-8'
+        lc_collate: 'C.UTF-8'
     - postgresql_users:
       - name: "{{ jira_db_user }}"
         password: "{{ jira_db_userpass }}"
         priv: # defaults to not set
         db: "{{ jira_db }}"
     # manala.locales for centos
-    - manala_locales_codes_default: POSIX.UTF-8
+    - manala_locales_codes_default: C.UTF-8
     - manala_locales_codes:
-## cannot open locale definition file `C': No such file or directory
-#      - { input: C, charmap: UTF-8 }
+      - { input: C, charmap: UTF-8 }
       - { input: en_US, charmap: UTF-8 }
-      - { input: POSIX, charmap: UTF-8 }
+#      - { input: POSIX, charmap: UTF-8 }
+  pre_tasks:
+    - set_fact:
+        # geerlingguy.postgresql
+        - postgresql_databases:
+          - name: "{{ jira_db }}"
+            lc_collate: 'POSIX.UTF-8'
+        # manala.locales for centos
+        - manala_locales_codes_default: POSIX.UTF-8
+        - manala_locales_codes:
+          - { input: en_US, charmap: UTF-8 }
+          - { input: POSIX, charmap: UTF-8 }
+      when: ansible_os_family == 'RedHat'
   roles:
     - manala.locales
     - geerlingguy.postgresql
