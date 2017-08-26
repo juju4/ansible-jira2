@@ -2,6 +2,7 @@
 
 - include: logging.yml
 
+## Centos7: requires EPEL
 - name: install ufw
   package: name=ufw state=present
 

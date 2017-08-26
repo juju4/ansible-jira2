@@ -24,5 +24,6 @@ galaxy_info:
   galaxy_tags:
   - development
 dependencies:
+  - juju4.redhat-epel
   - kbrebanov.jira
   - cmprescott.xml
