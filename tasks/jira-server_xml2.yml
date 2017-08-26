@@ -1,0 +1,10 @@
+---
+
+- name: Configure Jira server.xml
+  template:
+    src: server.xml.j2
+    dest: "{{ jira_installdir }}/conf/server.xml"
+    mode: '0644'
+    owner: jira
+    group: jira
+    backup: yes

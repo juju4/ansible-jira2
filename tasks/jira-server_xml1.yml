@@ -1,0 +1,28 @@
+---
+
+- name: Ensure python-lxml is present
+  package:
+    name: python-lxml
+    state: present
+
+- name: check if have a jira server.xml backup
+  stat: path="{{ jira_installdir }}/conf/server.xml.orig"
+  register: backup
+- name: backup jira server.xml
+  copy:
+    src: "{{ jira_installdir }}/conf/server.xml"
+    dest: "{{ jira_installdir }}/conf/server.xml.orig"
+    mode: '0400'
+    remote_src: true
+  when: not backup.stat.exists
+
+- name: Reverse Proxy | Update jira context path
+  xml:
+    path: "{{ jira_installdir }}/conf/server.xml"
+    xpath: /Server/Service/Engine/Host/Context
+    state: present
+    attribute: path
+    value: "{{ jira_context_path | default('/') }}"
+#    backup: yes
+  notify:
+    - restart jira
