@@ -13,6 +13,9 @@ This role is a meta role to setup Jira in a sane and secure environment. Using
 (optional)
 - juju4.smarthostclient
 
+If you provide a sql dump, it can be restored and get directly operational.
+Else, you will have to run the jira setup wizard to initialize database and license (trial available).
+
 ## Requirements & Dependencies
 
 ### Ansible

@@ -11,6 +11,9 @@
     backup: yes
   register: p1
 
+- include: restore.yml
+  when: jira_db_restorefile is defined and jira_db_restorefile != ''
+
 - name: Restart Jira
   service:
     name: jira

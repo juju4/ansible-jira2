@@ -37,6 +37,8 @@ jira_db: jiradb
 jira_db_user: jiradbuser
 jira_db_userpass: jiradbuserpass
 jira_jdbc_url: "jdbc:postgresql://localhost:5432/{{ jira_db }}"
+## restore existing db?
+#jira_db_restorefile: /orchestrator/path/to/dump.sql
 
 ## ActiveDirectory link?
 jira_link_activedirectory: false
