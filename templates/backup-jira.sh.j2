@@ -12,7 +12,7 @@ destfile=$dest/backup-jira-$date.tar.gz
 
 dirs="{{ jira_homedir }}/data/attachments {{ jira_homedir }}/dbconfig.xml {{ jira_homedir }}/jira-config.properties {{ jira_homedir }}/log"
 {% if jira_db_database is defined and jira_db_database != '' %}
-sudo -u postgres pg_dump "{{ jira_db_database }}" > $dest/pg_dump-jira.sql
+sudo -u postgres pg_dump -c "{{ jira_db_database }}" > $dest/pg_dump-jira.sql
 {% endif %}
 
 tar czf $destfile $dirs $dest/pg_dump-jira.sql
