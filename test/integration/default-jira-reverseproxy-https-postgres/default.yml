@@ -1,0 +1,52 @@
+---
+
+- hosts: all
+  vars:
+    - jira_reverseproxy: true
+    - jira_port: 443
+    - jira_dbbackend: postgres
+    # geerlingguy.apache
+    - apache_mods_enabled:
+      - rewrite.load
+      - ssl.load
+      - proxy.load
+      - proxy_http.load
+      - remoteip.load
+      - ratelimit.load
+    - apache_create_vhosts: false
+    - apache_remove_default_vhost: true
+    # geerlingguy.postgresql
+    - postgresql_databases:
+      - name: "{{ jira_db }}"
+        lc_collate: 'C.UTF-8'
+    - postgresql_users:
+      - name: "{{ jira_db_user }}"
+        password: "{{ jira_db_userpass }}"
+        priv: # defaults to not set
+        db: "{{ jira_db }}"
+    # juju4.harden-apache
+    - hardenwebserver_enable_defaultssl: false
+    # manala.locales for centos (Ubuntu)
+#    - manala_locales_codes_default: C.UTF-8
+    - manala_locales_codes:
+#      - { input: C, charmap: UTF-8 }
+      - { input: en_US, charmap: UTF-8 }
+#      - { input: POSIX, charmap: UTF-8 }
+  pre_tasks:
+    - set_fact:
+        # geerlingguy.postgresql
+        postgresql_databases:
+          - name: "{{ jira_db }}"
+            lc_collate: 'POSIX.UTF-8'
+        # manala.locales for centos
+        manala_locales_codes_default: POSIX.UTF-8
+        manala_locales_codes:
+          - { input: en_US, charmap: UTF-8 }
+          - { input: POSIX, charmap: UTF-8 }
+      when: ansible_os_family == 'RedHat'
+  roles:
+    - geerlingguy.apache
+    - juju4.harden-apache
+    - manala.locales
+    - geerlingguy.postgresql
+    - juju4.jira2
