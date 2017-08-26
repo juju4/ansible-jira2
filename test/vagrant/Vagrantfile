@@ -28,7 +28,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vjira.vm.provider "virtualbox" do |v|
           v.memory = 1024
         end
+        vjira.vm.network "forwarded_port", guest: 80, host: 8080
+        vjira.vm.network "forwarded_port", guest: 443, host: 8043
     end
 
 end
-
