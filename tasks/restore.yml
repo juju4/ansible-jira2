@@ -1,12 +1,14 @@
 ---
 
 - name: Get database restore file hash
-  stat: "path={{ jira_db_restorefile }} checksum_algorithm=sha256"
+  local_action: "stat path={{ jira_db_restorefile }} checksum_algorithm=sha256"
   register: restorefile
+  become: no
 
 - name: Check if restore file has already been restored
   stat: path="{{ backupdir }}/.psql_restore-{{ restorefile.stat.checksum }}"
   register: restored
+  when: restorefile.stat.exists
 
 - block:
     - name: ensure dest backup dir exists
@@ -21,7 +23,7 @@
     - name: stop jira service before db restore
       service:
         name: jira
-        status: stopped
+        state: stopped
     - name: restore database
       command: "{{ item }}"
       with_items:
@@ -33,7 +35,7 @@
     - name: start jira service after db restore
       service:
         name: jira
-        status: started
+        state: started
     - name: remove permissions to postgres user
       acl: "name={{ item.n }} entity=postgres etype=user state=absent"
       with_items:
@@ -41,4 +43,4 @@
         - { n: "{{ backupdir }}" }
     - name: add restoration marker
       file: "dest={{ backupdir }}/.psql_restore-{{ restorefile.stat.checksum }} state=touch"
-  when: not restored.stat.exists
+  when: restorefile.stat.exists and not restored.stat.exists
