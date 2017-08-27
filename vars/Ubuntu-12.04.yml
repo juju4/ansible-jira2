@@ -1,2 +1,3 @@
 ---
 
+ufw_ssh_rulename: OpenSSH

@@ -7,3 +7,5 @@ apache_sitedir: /etc/apache2/sites-available
 ssl_user: ssl-cert
 ssl_dir: /etc/ssl
 ssl_privatedir: /etc/ssl/private
+
+ufw_ssh_rulename: OpenSSH

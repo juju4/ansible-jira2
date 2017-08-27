@@ -72,8 +72,8 @@ jira_ufw_allow_ports_out:
 ## email/TLS?
   - 587
 ## web
-#  - 80
-#  - 443
+  - 80
+  - 443
 #  - 8080
 ## using dhcp?
 #  - 67
