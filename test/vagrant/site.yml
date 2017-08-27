@@ -3,7 +3,6 @@
 - hosts: vagrantselect
   vars:
     - jira_reverseproxy: true
-    - jira_https: true
     - jira_port: 443
     - jira_dbbackend: postgres
     # geerlingguy.apache

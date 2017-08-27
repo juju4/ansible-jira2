@@ -116,7 +116,7 @@
 {% if jira_reverseproxy is defined and jira_reverseproxy %}
     <!-- Apache Proxy Connector with values for scheme, proxyName and proxyPort -->
         <Connector acceptCount="100" connectionTimeout="20000" disableUploadTimeout="true" enableLookups="false" maxHttpHeaderSize="8192" maxThreads="150" minSpareThreads="25" port="8080" protocol="HTTP/1.1" redirectPort="8443" useBodyEncodingForURI="true" 
-            scheme="{% if jira_https %}https{% else %}http{% endif %}" proxyName="{{ jira_dns_servername }}" proxyPort="{{ jira_port }}"/> 
+            scheme="{% if jira_reverseproxy and jira_port == 443 %}https{% else %}http{% endif %}" proxyName="{{ jira_dns_servername }}" proxyPort="{{ jira_port }}"/> 
 
 {% endif %}
 
