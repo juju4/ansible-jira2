@@ -27,5 +27,6 @@
     - hardenwebserver_enable_defaultssl: false
   roles:
     - geerlingguy.apache
+    - juju4.redhat-epel
     - juju4.harden-apache
     - juju4.jira2

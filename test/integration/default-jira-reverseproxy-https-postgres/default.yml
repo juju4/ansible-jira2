@@ -46,6 +46,7 @@
       when: ansible_os_family == 'RedHat'
   roles:
     - geerlingguy.apache
+    - juju4.redhat-epel
     - juju4.harden-apache
     - manala.locales
     - geerlingguy.postgresql
