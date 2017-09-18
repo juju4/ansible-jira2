@@ -1,15 +1,6 @@
 ---
 ## https://confluence.atlassian.com/jira/connecting-to-an-ldap-directory-229838527.html
 ## https://confluence.atlassian.com/jira/configuring-an-ssl-connection-to-active-directory-229838539.html
+## see also jira-import-crt.yml
 
 - debug: msg="Most of ActiveDirectory configuration seems to be Web UI only..."
-
-- name: Upload server crt
-  copy:
-    src: "{{ jira_activedirectory_servercrt }}"
-    dest:
-    mask: '0644'
-    backup: yes
-
-- name: Import the Server Certificate
-  command: "keytool -importcert -keystore ./jre/lib/security/cacerts -file {{ jira_activedirectory_servercrt }}"

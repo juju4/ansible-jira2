@@ -1,0 +1,13 @@
+---
+
+- name: Upload certificates
+  copy:
+    src: "{{ item }}"
+    dest: "{{ jira_homedir }}/{{ item | basename }}"
+    mask: '0644'
+    backup: yes
+  with_items: "{{ jira_keystore_cert_import + [ jira_activedirectory_servercrt ] }}"
+
+- name: Import Certificate into jira keystore
+  command: "keytool -importcert -keystore ./jre/lib/security/cacerts -file {{ jira_homedir }}/{{ item | basename }}"
+  with_items: "{{ jira_keystore_cert_import + [ jira_activedirectory_servercrt ] }}"

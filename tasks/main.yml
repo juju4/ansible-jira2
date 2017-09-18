@@ -20,6 +20,8 @@
 - include: jira-https.yml
   when: jira_https
 
+- include: jira-import-crt.yml
+
 - include: jira-activedirectory.yml
   when: jira_link_activedirectory
 

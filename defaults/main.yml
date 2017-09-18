@@ -44,6 +44,9 @@ jira_jdbc_url: "jdbc:postgresql://localhost:5432/{{ jira_db }}"
 jira_link_activedirectory: false
 jira_activedirectory_servercrt: server-certificate.crt
 
+## orchestrator file to import on jira keystore. will append AD crt but can include TLS mail server
+jira_keystore_cert_import: []
+
 backupdir: /var/_backup
 scriptsdir: /usr/local/scripts
 
