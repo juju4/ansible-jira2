@@ -45,8 +45,9 @@ jira_link_activedirectory: false
 #jira_activedirectory_servercrt: server-certificate.crt
 jira_activedirectory_servercrt: ''
 
-## orchestrator file to import on jira keystore. will append AD crt but can include TLS mail server
+## orchestrator file to import on jira keystore. must include AD crt if using one but can include TLS mail server or others
 jira_keystore_cert_import: []
+#  - "{{ jira_activedirectory_servercrt }}"
 
 backupdir: /var/_backup
 scriptsdir: /usr/local/scripts

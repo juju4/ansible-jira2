@@ -6,8 +6,8 @@
     dest: "{{ jira_homedir }}/{{ item | basename }}"
     mode: '0644'
     backup: yes
-  with_items: "{{ jira_keystore_cert_import + [ jira_activedirectory_servercrt ] }}"
+  with_items: "{{ jira_keystore_cert_import }}"
 
 - name: Import Certificate into jira keystore
   command: "keytool -importcert -keystore ./jre/lib/security/cacerts -file {{ jira_homedir }}/{{ item | basename }}"
-  with_items: "{{ jira_keystore_cert_import + [ jira_activedirectory_servercrt ] }}"
+  with_items: "{{ jira_keystore_cert_import }}"
