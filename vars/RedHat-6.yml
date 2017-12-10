@@ -5,7 +5,7 @@ apache_confdir: /etc/httpd/conf.d
 apache_sitedir: /etc/httpd/conf.d
 
 ssl_user: root
-ssl_dir: /etc/pki/tls
+ssl_dir: /etc/pki/tls/certs
 ssl_privatedir: /etc/pki/tls/private
 
 ufw_ssh_rulename: SSH
