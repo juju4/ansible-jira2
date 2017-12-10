@@ -6,7 +6,7 @@
     src: robots.txt.j2
     dest: "{{ jira_installdir }}/robots.txt"
     mode: '0644'
-    backup: yes 
+    backup: yes
 
 ## https://confluence.atlassian.com/adminjiraserver071/logging-and-profiling-802592962.html
 
