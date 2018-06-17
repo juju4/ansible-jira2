@@ -21,10 +21,11 @@ Else, you will have to run the jira setup wizard to initialize database and lice
 ### Ansible
 It was tested on the following versions:
  * 2.3
+ * 2.5
 
 ### Operating systems
 
-Ubuntu 14.04, 16.04 and Centos7
+Ubuntu 14.04, 16.04, 18.04 and Centos7
 
 ## Example Playbook
 

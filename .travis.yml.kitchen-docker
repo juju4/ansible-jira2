@@ -11,6 +11,9 @@ env:
     version: 7
     suite: 'default'
   - distribution: ubuntu
+    version: 18.04
+    suite: 'default'
+  - distribution: ubuntu
     version: 16.04
     suite: 'default'
 #  - distribution: ubuntu
@@ -23,6 +26,9 @@ env:
 #    version: 9
   - distribution: centos
     version: 7
+    suite: 'default-jira-reverseproxy'
+  - distribution: ubuntu
+    version: 18.04
     suite: 'default-jira-reverseproxy'
   - distribution: ubuntu
     version: 16.04
