@@ -11,13 +11,18 @@
   with_items: "{{ jira_https_files_to_upload }}"
 
 - name: Create keystore
-  command: "keytool -genkey -alias jira -keyalg RSA -keystore {{ jira_keystore }} -storepass {{ jira_keystore_pass }} -validity 360 -keysize 2048"
+  command: >
+    keytool -genkey -alias jira -keyalg RSA -keystore {{ jira_keystore }}
+        -storepass {{ jira_keystore_pass }} -validity 360 -keysize 2048
   args:
     creates: "{{ jira_keystore }}"
 
 - block:
     - name: Create CSR
-      command: "keytool -certreq -keyalg RSA -alias jira -keystore {{ jira_keystore }} -storepass {{ jira_keystore_pass }} -file {{ jira_https_csr }} -dname {{ jira_https_dname }} -noprompt"
+      command: >
+        keytool -certreq -keyalg RSA -alias jira -keystore {{ jira_keystore }}
+            -storepass {{ jira_keystore_pass }} -file {{ jira_https_csr }}
+            -dname {{ jira_https_dname }} -noprompt
       args:
         creates: "{{ jira_https_csr }}"
 
@@ -25,26 +30,37 @@
       stat: path="{{ jira_https_rootcert }}"
       register: rootcert
     - name: Import root certificate
-      command: "keytool -import -alias rootCA -keystore {{ jira_keystore }} -storepass {{ jira_keystore_pass }} -trustcacerts -file {{ jira_https_rootcert }}"
+      command: >
+        keytool -import -alias rootCA -keystore {{ jira_keystore }}
+            -storepass {{ jira_keystore_pass }} -trustcacerts
+            -file {{ jira_https_rootcert }}
       when: rootcert.stat.exists
 
     - name: Check if have signed certificate
       stat: path="{{ jira_https_crt }}"
       register: crt
     - name: Import signed certificate
-      command: "keytool -import -alias jira -keystore {{ jira_keystore }} -storepass {{ jira_keystore_pass }} -file {{ jira_https_crt }}"
+      command: >
+        keytool -import -alias jira -keystore {{ jira_keystore }}
+            -storepass {{ jira_keystore_pass }}
+            -file {{ jira_https_crt }}
       when: crt.stat.exists
   when: jira_https_files_to_upload != []
 
 - block:
     - name: Generating self-signed certificate
-      command: "keytool -selfcert -keyalg RSA -alias jira -keystore {{ jira_keystore }} -storepass {{ jira_keystore_pass }} -file {{ jira_https_csr }} -dname {{ jira_https_dname }} -noprompt"
+      command: >
+        keytool -selfcert -keyalg RSA -alias jira -keystore {{ jira_keystore }}
+            -storepass {{ jira_keystore_pass }} -file {{ jira_https_csr }}
+            -dname {{ jira_https_dname }} -noprompt
       args:
         creates: "{{ jira_https_csr }}"
   when: jira_https_files_to_upload == []
 
 - name: Verify the certificate exists within the keystore
-  shell: "keytool -list -alias jira -keystore {{ jira_keystore }} -storepass {{ jira_keystore_pass }} | grep PrivateKeyEntry"
+  shell: >
+    keytool -list -alias jira -keystore {{ jira_keystore }}
+        -storepass {{ jira_keystore_pass }} | grep PrivateKeyEntry
   changed_when: false
   register: keytoolcheck
 - debug: var=keytoolcheck.stdout_lines

@@ -5,6 +5,8 @@
 ## Centos7: requires EPEL
 - name: install ufw
   package: name=ufw state=present
+  register: pkg_result
+  until: pkg_result is success
 
 - name: ufw | RedHat | requires ufw to be enabled before configuration
   ufw: state=enabled
@@ -69,7 +71,8 @@
         src: /lib/systemd/system/ufw.service
         dest: /etc/systemd/system/ufw.service
         remote_src: true
-    - set_fact:
+    - name: Set ufw systemd_string
+      set_fact:
         systemd_string: "{% for i in jira_ufw_vpn %}sys-devices-virtual-net-{{ i }}.device {% endfor %}"
     - name: ensure vpn interface are presents in ufw.service
       lineinfile:

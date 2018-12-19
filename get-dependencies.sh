@@ -9,8 +9,8 @@ else
 rolesdir=$(dirname $0)/..
 fi
 
-[ ! -d $rolesdir/juju4.redhat-epel ] && git clone https://github.com/juju4/ansible-redhat-epel $rolesdir/juju4.redhat-epel
-[ ! -d $rolesdir/juju4.harden-apache ] && git clone https://github.com/juju4/ansible-harden-apache $rolesdir/juju4.harden-apache
+[ ! -d $rolesdir/juju4.redhat_epel ] && git clone https://github.com/juju4/ansible-redhat-epel $rolesdir/juju4.redhat_epel
+[ ! -d $rolesdir/juju4.harden_apache ] && git clone https://github.com/juju4/ansible-harden-apache $rolesdir/juju4.harden_apache
 [ ! -d $rolesdir/juju4.smarthostclient ] && git clone https://github.com/juju4/ansible-smarthostclient $rolesdir/juju4.smarthostclient
 #[ ! -d $rolesdir/kbrebanov.java ] && git clone https://github.com/kbrebanov/ansible-java $rolesdir/kbrebanov.java
 [ ! -d $rolesdir/kbrebanov.java ] && git clone https://github.com/juju4/ansible-java $rolesdir/kbrebanov.java
@@ -29,4 +29,3 @@ fi
 
 ## don't stop build on this script return code
 true
-

@@ -7,6 +7,8 @@
   with_items:
     - rsyslog
     - logrotate
+  register: pkg_result
+  until: pkg_result is success
 
 - name: get rsyslog version
   command: "rsyslogd -v | awk -F'[ ,]' '/rsyslogd/ { print $2 }'"
@@ -26,4 +28,3 @@
 
 - name: add logrotate configuration for ufw.log
   template: src=logrotate-ufw.j2 dest=/etc/logrotate.d/ufw mode=0644
-

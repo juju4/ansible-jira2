@@ -9,5 +9,7 @@
   with_items: "{{ jira_keystore_cert_import }}"
 
 - name: Import Certificate into jira keystore
-  command: "keytool -importcert -keystore ./jre/lib/security/cacerts -file {{ jira_homedir }}/{{ item | basename }}"
+  command: >
+    keytool -importcert -keystore ./jre/lib/security/cacerts
+        -file {{ jira_homedir }}/{{ item | basename }}
   with_items: "{{ jira_keystore_cert_import }}"
