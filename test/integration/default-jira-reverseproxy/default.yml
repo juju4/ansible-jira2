@@ -23,10 +23,10 @@
         password: "{{ jira_db_userpass }}"
         priv: # defaults to not set
         db: "{{ jira_db }}"
-    # juju4.harden-apache
+    # juju4.harden_apache
     - hardenwebserver_enable_defaultssl: false
   roles:
     - geerlingguy.apache
-    - juju4.redhat-epel
-    - juju4.harden-apache
+    - juju4.redhat_epel
+    - juju4.harden_apache
     - juju4.jira2
