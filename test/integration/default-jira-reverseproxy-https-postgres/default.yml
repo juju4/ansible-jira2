@@ -24,7 +24,7 @@
         password: "{{ jira_db_userpass }}"
         priv: # defaults to not set
         db: "{{ jira_db }}"
-    # juju4.harden-apache
+    # juju4.harden_apache
     - hardenwebserver_enable_defaultssl: false
     # manala.locales for centos (Ubuntu)
 #    - manala_locales_codes_default: C.UTF-8
@@ -46,8 +46,8 @@
       when: ansible_os_family == 'RedHat'
   roles:
     - geerlingguy.apache
-    - juju4.redhat-epel
-    - juju4.harden-apache
+    - juju4.redhat_epel
+    - juju4.harden_apache
     - manala.locales
     - geerlingguy.postgresql
     - juju4.jira2

@@ -1,7 +1,10 @@
 ---
 
 - name: Get database restore file hash
-  local_action: "stat path={{ jira_db_restorefile }} checksum_algorithm=sha256"
+  stat:
+    path: "{{ jira_db_restorefile }}"
+    checksum_algorithm: sha256
+  connection: local
   register: restorefile
   become: no
 

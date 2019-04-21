@@ -27,3 +27,5 @@
 
 - name: install curl for serverspec testing
   package: name=curl state=present
+  register: pkg_result
+  until: pkg_result is success

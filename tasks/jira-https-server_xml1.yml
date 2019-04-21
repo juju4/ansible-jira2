@@ -42,4 +42,3 @@
 #    backup: yes
   with_items:
     - { attr: 'redirectPort', val: '8443' }
-

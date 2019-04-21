@@ -30,11 +30,15 @@
       with_items:
         - libselinux-python
         - libsemanage-python
+      register: pkg_result
+      until: pkg_result is success
     - name: RedHat | Allow apache to connect to network (selinux)
       seboolean:
         name: httpd_can_network_connect
         state: yes
         persistent: yes
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7" and ansible_selinux
+  when: >
+    ansible_os_family == "RedHat" and ansible_distribution_major_version == "7" and
+    ansible_selinux
 
 #- name: Disable HTTP compression in Jira - GUI only???
