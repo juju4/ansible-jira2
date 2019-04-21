@@ -10,12 +10,8 @@
     owner: jira
     backup: yes
   register: p1
+  notify:
+    - restart jira
 
 - include: restore.yml
   when: jira_db_restorefile is defined and jira_db_restorefile != ''
-
-- name: Restart Jira
-  service:
-    name: jira
-    state: restarted
-  when: p1.changed

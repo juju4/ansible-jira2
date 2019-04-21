@@ -44,7 +44,9 @@
   when: jira_https_files_to_upload == []
 
 - name: Verify the certificate exists within the keystore
-  shell: "keytool -list -alias jira -keystore {{ jira_keystore }} -storepass {{ jira_keystore_pass }} | grep PrivateKeyEntry"
+  shell: "set -o pipefail && keytool -list -alias jira -keystore {{ jira_keystore }} -storepass {{ jira_keystore_pass }} | grep PrivateKeyEntry"
+  args:
+    executable: /bin/bash
   changed_when: false
   register: keytoolcheck
 - debug: var=keytoolcheck.stdout_lines
