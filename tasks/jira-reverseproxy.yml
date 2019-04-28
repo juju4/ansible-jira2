@@ -25,11 +25,10 @@
 - block:
     - name: RedHat | ensure selinux dependency is present
       yum:
-        name: "{{ item }}"
+        name:
+          - libselinux-python
+          - libsemanage-python
         state: present
-      with_items:
-        - libselinux-python
-        - libsemanage-python
       register: pkg_result
       until: pkg_result is success
     - name: RedHat | Allow apache to connect to network (selinux)
