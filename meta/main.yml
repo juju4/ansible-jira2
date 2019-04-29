@@ -17,5 +17,6 @@ galaxy_info:
   - development
 dependencies:
   - juju4.redhat_epel
+  - geerlingguy.postgresql
   - kbrebanov.jira
   - cmprescott.xml
