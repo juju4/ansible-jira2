@@ -56,6 +56,10 @@
           - java-1.8.0-openjdk
         postgresql_repo: https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-redhat96-9.6-3.noarch.rpm
         postgresql_pkgnames: [ 'postgresql96-server' ]
+        postgresql_data_dir: '/var/lib/pgsql/9.6/data'
+        postgresql_bin_path: '/usr/pgsql-9.6/bin'
+        postgresql_config_path: '/var/lib/pgsql/9.6/data'
+        postgresql_daemon: 'postgresql-9.6'
       when: ansible_os_family == "RedHat" and ansible_distribution_version.split('.')[0] == '7'
   roles:
     - geerlingguy.apache
