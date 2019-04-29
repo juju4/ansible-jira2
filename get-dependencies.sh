@@ -17,7 +17,7 @@ fi
 #[ ! -d $rolesdir/kbrebanov.jira ] && git clone https://github.com/kbrebanov/ansible-jira $rolesdir/kbrebanov.jira
 [ ! -d $rolesdir/kbrebanov.jira ] && git clone https://github.com/juju4/ansible-jira $rolesdir/kbrebanov.jira
 [ ! -d $rolesdir/geerlingguy.java ] && git clone https://github.com/geerlingguy/ansible-role-java $rolesdir/geerlingguy.java
-[ ! -d $rolesdir/geerlingguy.postgresql ] && git clone https://github.com/geerlingguy/ansible-role-postgresql $rolesdir/geerlingguy.postgresql
+[ ! -d $rolesdir/geerlingguy.postgresql ] && git clone https://github.com/juju4/ansible-role-postgresql $rolesdir/geerlingguy.postgresql
 [ ! -d $rolesdir/geerlingguy.apache ] && git clone https://github.com/geerlingguy/ansible-role-apache $rolesdir/geerlingguy.apache
 [ ! -d $rolesdir/cmprescott.xml ] && git clone https://github.com/cmprescott/ansible-xml $rolesdir/cmprescott.xml
 #[ ! -d $rolesdir/manala.locales ] && git clone https://github.com/manala/ansible-role-locales $rolesdir/manala.locales
