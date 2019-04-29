@@ -53,7 +53,11 @@
 ## FIXME! ansible module only affect incoming traffic, not idempotent
 ## Note: keep last, especially if you block by default
 - name: ufw | default policy (incoming)
-  ufw: state=enabled policy={{ jira_ufw_default_policy }} log=yes
+  ufw:
+    state: enabled
+    direction: incoming
+    policy: "{{ jira_ufw_default_policy }}"
+    log: yes
 - name: ufw | check current status
   command: "ufw status verbose"
   register: ufwstatus
