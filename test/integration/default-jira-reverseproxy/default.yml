@@ -63,4 +63,6 @@
     - geerlingguy.apache
     - juju4.redhat_epel
     - juju4.harden_apache
+    - manala.locales
+    - geerlingguy.postgresql
     - juju4.jira2
