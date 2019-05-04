@@ -35,9 +35,6 @@ suites:
   - name: default
     run_list:
     attributes:
-    includes:
-      - ubuntu-18.04
-      - centos-7
   - name: default-jira-reverseproxy
     run_list:
     attributes:
