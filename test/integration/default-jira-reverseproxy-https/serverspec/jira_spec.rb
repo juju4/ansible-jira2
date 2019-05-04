@@ -40,7 +40,7 @@ describe file('/opt/atlassian/jira/current/logs/catalina.out') do
   its(:content) { should match /Server version:/ }
   its(:content) { should match /JIRA starting.../ }
   its(:content) { should match /Java Compatibility Information/ }
-  its(:content) { should match /Initializing ProtocolHandler \[http-nio-8080\]/ }
+  its(:content) { should match /Initializing ProtocolHandler \["http-nio-8080"\]/ }
 #  its(:content) { should match /Entity model field type name                  : postgres72/ }
 #  its(:content) { should_not match /Your postgres72 database is currently using an unsupported collation:/ }
 #  its(:content) { should_not match /ERROR / }
