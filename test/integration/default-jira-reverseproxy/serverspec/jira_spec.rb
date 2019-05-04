@@ -33,7 +33,6 @@ end
 
 describe file('/opt/atlassian/jira/current/conf/server.xml') do
   it { should be_file }
-  its(:content) { should match /Atlassian JIRA Standalone Edition Tomcat Configuration/ }
   its(:content) { should match /<Connector port="8080"/ }
 end
 describe file('/opt/atlassian/jira/current/logs/catalina.out') do
@@ -41,6 +40,6 @@ describe file('/opt/atlassian/jira/current/logs/catalina.out') do
   its(:content) { should match /Server version:/ }
   its(:content) { should match /JIRA starting.../ }
   its(:content) { should match /Java Compatibility Information/ }
-  its(:content) { should match /Starting ProtocolHandler \[http-nio-8080\]/ }
+  its(:content) { should match /Initializing ProtocolHandler \[http-nio-8080\]/ }
 #  its(:content) { should_not match /ERROR / }
 end
