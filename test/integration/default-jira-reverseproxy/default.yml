@@ -25,7 +25,24 @@
         db: "{{ jira_db }}"
     # juju4.harden_apache
     - hardenwebserver_enable_defaultssl: false
+    # manala.locales for centos (Ubuntu)
+#    - manala_locales_codes_default: C.UTF-8
+    - manala_locales_codes:
+#      - { input: C, charmap: UTF-8 }
+      - { input: en_US, charmap: UTF-8 }
+#      - { input: POSIX, charmap: UTF-8 }
   pre_tasks:
+    - set_fact:
+        # geerlingguy.postgresql
+        postgresql_databases:
+          - name: "{{ jira_db }}"
+            lc_collate: 'POSIX.UTF-8'
+        # manala.locales for centos
+        manala_locales_codes_default: POSIX.UTF-8
+        manala_locales_codes:
+          - { input: en_US, charmap: UTF-8 }
+          - { input: POSIX, charmap: UTF-8 }
+      when: ansible_os_family == 'RedHat'
     - set_fact:
 # Jira 7.6.11+ supports openjdk-8 only, upcoming 8.2+ will support both openjdk-8 and 11
 # https://community.atlassian.com/t5/Agile-articles/Java-11-OpenJDK-support-update-for-Server-and-Data-Center/ba-p/967836
