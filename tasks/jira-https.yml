@@ -59,7 +59,7 @@
 
 - name: Verify the certificate exists within the keystore
   shell: >
-    set -o pipefail &&    
+    set -o pipefail &&
     keytool -list -alias jira -keystore {{ jira_keystore }}
         -storepass {{ jira_keystore_pass }} | grep PrivateKeyEntry
   args:
