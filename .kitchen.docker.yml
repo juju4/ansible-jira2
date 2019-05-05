@@ -63,7 +63,7 @@ suites:
       - ubuntu-18.04
 ## systemd/docker issue (postgresql...)
 #      - centos-7
-  - name: default-jira-reverseproxy-https-postgres
+  - name: default-jira-reverseproxy-https-pg
     run_list:
     attributes:
     includes:
