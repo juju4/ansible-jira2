@@ -51,7 +51,11 @@
     -->
     <Service name="Catalina">
 
+        <!-- Relaxing chars because of JRASERVER-67974 -->
         <Connector port="8080"
+
+                   relaxedPathChars="[]|"
+                   relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
 
                    maxThreads="150"
                    minSpareThreads="25"
@@ -89,7 +93,10 @@
 
         ====================================================================================
         -->
-            <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+        <Connector port="8443"
+              protocol="org.apache.coyote.http11.Http11NioProtocol"
+              relaxedPathChars="[]|"
+              relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
               maxHttpHeaderSize="8192" SSLEnabled="true"
               maxThreads="150" minSpareThreads="25"
               enableLookups="false" disableUploadTimeout="true"
@@ -116,8 +123,18 @@
 
 {% if jira_reverseproxy is defined and jira_reverseproxy %}
     <!-- Apache Proxy Connector with values for scheme, proxyName and proxyPort -->
-        <Connector acceptCount="100" connectionTimeout="20000" disableUploadTimeout="true" enableLookups="false" maxHttpHeaderSize="8192" maxThreads="150" minSpareThreads="25" port="8080" protocol="HTTP/1.1" redirectPort="8443" useBodyEncodingForURI="true" 
-            scheme="{% if jira_reverseproxy and jira_port == 443 %}https{% else %}http{% endif %}" proxyName="{{ jira_dns_servername }}" proxyPort="{{ jira_port }}"/> 
+        <Connector
+              relaxedPathChars="[]|"
+              relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
+              acceptCount="100" connectionTimeout="20000" disableUploadTimeout="true"
+              enableLookups="false" maxHttpHeaderSize="8192"
+              maxThreads="150" minSpareThreads="25"
+              port="8080" protocol="HTTP/1.1"
+              redirectPort="8443"
+              useBodyEncodingForURI="true"
+              scheme="{% if jira_reverseproxy and jira_port == 443 %}https{% else %}http{% endif %}"
+              proxyName="{{ jira_dns_servername }}"
+              proxyPort="{{ jira_port }}"/>
 
 {% endif %}
 
@@ -140,6 +157,7 @@
                               factory="org.objectweb.jotm.UserTransactionFactory" jotm.timeout="60"/>
                     <Manager pathname=""/>
                     <JarScanner scanManifest="false"/>
+                    <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve" threshold="120" />
                 </Context>
 
             </Host>
