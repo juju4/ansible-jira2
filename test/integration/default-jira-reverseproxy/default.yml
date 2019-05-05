@@ -28,9 +28,9 @@
     # manala.locales for centos (Ubuntu)
 #    - manala_locales_codes_default: C.UTF-8
     - manala_locales_codes:
-#      - { input: C, charmap: UTF-8 }
-      - { input: en_US, charmap: UTF-8 }
-#      - { input: POSIX, charmap: UTF-8 }
+#      - C.UTF-8
+      - en_US.UTF-8
+#      - POSIX.UTF-8
   pre_tasks:
     - set_fact:
         # geerlingguy.postgresql
@@ -40,8 +40,8 @@
         # manala.locales for centos
         manala_locales_codes_default: POSIX.UTF-8
         manala_locales_codes:
-          - { input: en_US, charmap: UTF-8 }
-          - { input: POSIX, charmap: UTF-8 }
+          - en_US.UTF-8
+          - POSIX.UTF-8
       when: ansible_os_family == 'RedHat'
     - set_fact:
 # Jira 7.6.11+ supports openjdk-8 only, upcoming 8.2+ will support both openjdk-8 and 11
