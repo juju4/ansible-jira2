@@ -36,3 +36,16 @@
   wait_for:
     port: "{{ jira_int_port }}"
     delay: 15
+  register: w1
+  ignore_errors: true
+
+- block:
+    - name: 2nd jira restart
+      service:
+        name: jira
+        state: restarted
+    - name: Ensure Jira has finished to initialize 2
+      wait_for:
+        port: "{{ jira_int_port }}"
+        delay: 15
+  when: w1 is failed
