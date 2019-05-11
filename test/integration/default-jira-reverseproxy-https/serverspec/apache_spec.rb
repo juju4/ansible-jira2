@@ -24,5 +24,5 @@ describe command('apache2ctl -M') do
 end
 
 describe port(443) do
-  it { should be_listening.with('tcp') }
+  it { should be_listening.with('tcp6') }
 end

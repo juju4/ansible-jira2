@@ -25,7 +25,7 @@ describe command('curl -kv https://localhost/'), :if => os[:family] == 'redhat' 
   its(:stderr) { should match /default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'self';/ }
 end
 describe command('curl -kv https://localhost/doesnotexist') do
-#  its(:stdout) { should match /404 Not Found/ }
-  its(:stdout) { should match /<title>Oops, you&#39;ve found a dead link. - JIRA<\/title>/ }
+  its(:stderr) { should match /404 Not Found/ }
+  its(:stdout) { should match "" }
 end
 

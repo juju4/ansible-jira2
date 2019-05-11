@@ -10,7 +10,7 @@ set :backend, :exec
 #end
 
 describe command('curl -vkL https://localhost') do
-  its(:stdout) { should match /<title>Your Company JIRA - JIRA setup<\/title>/ }
+  its(:stdout) { should match /<title>Jira - Jira setup<\/title>/ }
   its(:stdout) { should match /Set up application properties/ }
   its(:exit_status) { should eq 0 }
 end
