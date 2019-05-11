@@ -38,6 +38,6 @@
         persistent: yes
   when: >
     ansible_os_family == "RedHat" and ansible_distribution_major_version == "7" and
-    ansible_selinux
+    ansible_selinux.status is defined and ansible_selinux.status != 'disabled'
 
 #- name: Disable HTTP compression in Jira - GUI only???
