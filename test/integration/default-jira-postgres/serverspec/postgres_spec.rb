@@ -17,10 +17,12 @@ describe service('postgresql-9.6'), :if => os[:family] == 'redhat' do
   it { should be_running   }
 end
 
-describe process("postgres") do
+describe process("postmaster"), :if => os[:family] == 'redhat' do
   its(:user) { should eq "postgres" }
-## not on centos
-#  its(:args) { should match /main\/postgresql.conf/ }
+end
+describe process("postgres"), :if => os[:family] == 'ubuntu' do
+  its(:user) { should eq "postgres" }
+  its(:args) { should match /main\/postgresql.conf/ }
 end
 
 describe port(5432) do
