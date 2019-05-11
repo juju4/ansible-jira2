@@ -25,7 +25,8 @@ describe command('curl -kvL http://localhost/'), :if => os[:family] == 'redhat' 
   its(:stderr) { should match /default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'self';/ }
 end
 describe command('curl -kvL http://localhost/doesnotexist') do
-  its(:stderr) { should match /404 Not Found/ }
+#  its(:stderr) { should match /404 Not Found/ }
+  its(:stderr) { should match /HTTP\/1.1 503/ }
   its(:stdout) { should match "" }
 end
 

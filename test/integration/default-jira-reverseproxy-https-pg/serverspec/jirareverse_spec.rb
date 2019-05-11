@@ -11,7 +11,7 @@ set :backend, :exec
 
 describe command('curl -vkL https://localhost') do
   its(:stdout) { should match /<title>Jira - Jira setup<\/title>/ }
-  its(:stdout) { should match /Set up application properties/ }
+  its(:stdout) { should match /Set up and configure your Jira instance manually/ }
   its(:exit_status) { should eq 0 }
 end
 
