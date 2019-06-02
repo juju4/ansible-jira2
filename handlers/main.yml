@@ -4,7 +4,8 @@
   service: name=jira state=restarted
 
 - name: restart apache
-  service: name=apache2 state=restarted
+  service: name={{ apache_svc }} state=restarted
+  when: not (ansible_virtualization_type is defined and ansible_virtualization_type == "docker")
 
 - name: restart rsyslog
   service: name=rsyslog state=restarted
