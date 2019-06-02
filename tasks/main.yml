@@ -15,15 +15,15 @@
   when: jira_dbbackend is defined and jira_dbbackend == 'postgres'
 
 - include: jira-reverseproxy.yml
-  when: jira_reverseproxy
+  when: jira_reverseproxy|bool
 
 - include: jira-https.yml
-  when: jira_https
+  when: jira_https|bool
 
 - include: jira-import-crt.yml
 
 - include: jira-activedirectory.yml
-  when: jira_link_activedirectory
+  when: jira_link_activedirectory|bool
 
 - name: install curl for serverspec testing
   package: name=curl state=present
