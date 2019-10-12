@@ -59,7 +59,7 @@
         postgresql_config_path: '/var/lib/pgsql/9.6/data'
         postgresql_daemon: 'postgresql-9.6'
       when: ansible_os_family == "RedHat" and ansible_distribution_version.split('.')[0] == '7'
-    - name: Install psycopg2-binary - avoid undefined symbol: PQencryptPasswordConn
+    - name: Install psycopg2-binary - avoid undefined symbol PQencryptPasswordConn
       pip: name=psycopg2-binary
       become: yes
       when: ansible_os_family == "RedHat" and ansible_distribution_version.split('.')[0] == '7'
