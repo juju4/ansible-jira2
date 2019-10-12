@@ -37,6 +37,7 @@
         postgresql_databases:
           - name: "{{ jira_db }}"
             lc_collate: 'POSIX.UTF-8'
+        postgresql_python_library: ""
         # manala.locales for centos
         manala_locales_codes_default: POSIX.UTF-8
         manala_locales_codes:
