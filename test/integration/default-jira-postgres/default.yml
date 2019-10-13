@@ -35,6 +35,7 @@
         postgresql_databases:
           - name: "{{ jira_db }}"
             lc_collate: 'POSIX.UTF-8'
+        postgresql_python_library: ""
         # manala.locales for centos
         manala_locales_codes_default: POSIX.UTF-8
         manala_locales_codes:
@@ -56,6 +57,10 @@
         postgresql_bin_path: '/usr/pgsql-9.6/bin'
         postgresql_config_path: '/var/lib/pgsql/9.6/data'
         postgresql_daemon: 'postgresql-9.6'
+      when: ansible_os_family == "RedHat" and ansible_distribution_version.split('.')[0] == '7'
+    - name: Install psycopg2-binary - avoid undefined symbol PQencryptPasswordConn
+      pip: name=psycopg2-binary
+      become: yes
       when: ansible_os_family == "RedHat" and ansible_distribution_version.split('.')[0] == '7'
   roles:
     - manala.locales
