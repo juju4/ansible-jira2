@@ -14,4 +14,4 @@
     - restart jira
 
 - include: restore.yml
-  when: jira_db_restorefile is defined and jira_db_restorefile != ''
+  when: jira_db_restorefile is defined and jira_db_restorefile|string
