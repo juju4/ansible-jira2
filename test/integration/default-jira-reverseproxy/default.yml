@@ -53,7 +53,7 @@
     - set_fact:
         java_packages:
           - java-1.8.0-openjdk
-        postgresql_repo: https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-redhat96-9.6-3.noarch.rpm
+        postgresql_repo: https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
         postgresql_pkgnames: [ 'postgresql96-server' ]
         postgresql_data_dir: '/var/lib/pgsql/9.6/data'
         postgresql_bin_path: '/usr/pgsql-9.6/bin'
