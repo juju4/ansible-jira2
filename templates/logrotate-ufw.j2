@@ -1,5 +1,6 @@
-# {{ ansible_managed }}
-## /etc/logrotate.d/nfsen
+{{ ansible_managed | comment }}
+
+## /etc/logrotate.d/ufw
 /var/log/ufw.log {
     rotate 14
     daily
