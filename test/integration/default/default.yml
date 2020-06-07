@@ -3,6 +3,8 @@
 - hosts: all
   vars:
     - jira_reverseproxy: false
+    - jira_version: 8.5.5
+    - jira_archive_sha256sum: 2928a7a3c2d114308898f62416a4b10a99fa94624adaea8fce8311d70f9ba681
   pre_tasks:
     - set_fact:
 # Jira 7.6.11+ supports openjdk-8 only, upcoming 8.2+ will support both openjdk-8 and 11
