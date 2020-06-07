@@ -11,7 +11,7 @@
   until: pkg_result is success
 
 - name: get rsyslog version
-  command: "rsyslogd -v | awk -F'[ ,]' '/rsyslogd/ { print $2 }'"
+  shell: "rsyslogd -v | awk 'match($0, /rsyslogd\\s+([0-9.]+)/, a) { print a[1] }'"
   changed_when: false
   register: rsyslog_v
 
