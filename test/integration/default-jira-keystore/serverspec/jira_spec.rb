@@ -9,6 +9,11 @@ set :backend, :exec
 #    c.formatter = 'JUnit'
 #end
 
+if (os[:family] == 'ubuntu' && os[:release] == '20.04')
+  set java_version = '11.0'
+else
+  set java_version = '1.8'
+end
 
 describe service('jira') do
   it { should be_enabled }
@@ -16,7 +21,7 @@ describe service('jira') do
 end  
 
 describe command('java -version') do
-  its(:stderr) { should match /1.8/ }
+  its(:stderr) { should match /#{java_version}/ }
   its(:exit_status) { should eq 0 }
 end
 
