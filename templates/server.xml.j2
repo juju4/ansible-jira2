@@ -192,7 +192,7 @@
             -->
 	    <Valve className="org.apache.catalina.valves.AccessLogValve"
 {% if jira2_jsonlog %}
-                   pattern="{&quot;time&quot;:&quot;%t&quot;,&quot;remote_addr&quot;:&quot;%h&quot;,&quot;remote_user&quot;:&quot;%u&quot;,&quot;request&quot;:&quot;%r&quot;,&quot;request_method&quot;:&quot;%m&quot;,&quot;uri&quot;:&quot;%U&quot;,&quot;query_parameters&quot;:&quot;%q&quot;,&quot;protocol&quot;:&quot;%H&quot;,&quot;request_time&quot;:&quot;%D&quot;,&quot;status&quot;:&quot;%s&quot;,&quot;body_bytes_sent&quot;:&quot;%b&quot;,&quot;http_referrer&quot;:&quot;%{Referer}i&quot;,&quot;http_user_agent&quot;:&quot;%{User-Agent}i&quot;,&quot;jira_request_id&quot;:&quot;%{jira.request.id}r&quot;,&quot;jira_request_username&quot;:&quot;%{jira.request.username}r&quot;}"
+                   pattern="{&quot;time&quot;:&quot;%t&quot;,&quot;remote_addr&quot;:&quot;%h&quot;,&quot;remote_user&quot;:&quot;%u&quot;,&quot;request&quot;:&quot;%r&quot;,&quot;request_method&quot;:&quot;%m&quot;,&quot;uri&quot;:&quot;%U&quot;,&quot;query_parameters&quot;:&quot;%q&quot;,&quot;protocol&quot;:&quot;%H&quot;,&quot;request_time&quot;:&quot;%D&quot;,&quot;status&quot;:&quot;%s&quot;,&quot;body_bytes_sent&quot;:&quot;%b&quot;,&quot;http_referrer&quot;:&quot;%{Referer}i&quot;,&quot;http_user_agent&quot;:&quot;%{User-Agent}i&quot;,&quot;jira_request_id&quot;:&quot;%{jira.request.id}r&quot;,&quot;jira_request_username&quot;:&quot;%{jira.request.username}r&quot;}"/>
 {% else %}
                    pattern="%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;"/>
 {% endif %}
