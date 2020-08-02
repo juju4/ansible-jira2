@@ -12,4 +12,5 @@
   command: >
     keytool -importcert -keystore ./jre/lib/security/cacerts
         -file "{{ jira_homedir }}/{{ item | basename }}"
+        -storepass "{{ jira_keystore_storepass | default('changeit') }}" -noprompt
   with_items: "{{ jira_keystore_cert_import }}"
