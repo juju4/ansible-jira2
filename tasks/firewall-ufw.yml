@@ -34,7 +34,7 @@
     rule: allow
     interface: "{{ jira_ufw_if }}"
     direction: in
-    to_port: "{{ item }}"
+    to_port: "{{ item | string }}"
   with_items: "{{ jira_ufw_allow_ports_in }}"
 
 - name: ufw | allow {{ jira_ufw_if }} outgoing traffic for defined ports
@@ -42,7 +42,7 @@
     rule: allow
     interface: "{{ jira_ufw_if }}"
     direction: out
-    to_port: "{{ item }}"
+    to_port: "{{ item | string }}"
     log: "{{ jira_ufw_out_logging }}"
   with_items: "{{ jira_ufw_allow_ports_out }}"
 
@@ -64,7 +64,7 @@
   changed_when: false
 - name: ufw | default policy (outgoing)
   command: "ufw default {{ jira_ufw_default_policy }} outgoing"
-  when: "'{{ jira_ufw_default_policy }} (outgoing)' not in ufwstatus.stdout"
+  when: ufwstatus.stdout.find(jira_ufw_default_policy + ' (outgoing)') == -1
 
 - block:
     - name: check if custom ufw.service file
