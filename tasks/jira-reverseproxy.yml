@@ -2,9 +2,6 @@
 ## https://confluence.atlassian.com/kb/proxying-atlassian-server-applications-with-apache-http-server-mod_proxy_http-806032611.html
 ## https://confluence.atlassian.com/adminjiraserver071/integrating-jira-with-apache-using-ssl-802593043.html
 
-#- include: jira-server_xml1.yml
-- include: jira-server_xml2.yml
-
 - name: setup jira reverse-proxy configuration
   template:
     src: apache-jira.conf.j2
