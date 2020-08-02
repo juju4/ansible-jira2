@@ -88,3 +88,5 @@ jira_ufw_allow_if_out: []
 
 ## if you have vpn interface that should be present before? tun0....
 jira_ufw_vpn: []
+
+jira2_jsonlog: true
