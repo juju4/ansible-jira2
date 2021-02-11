@@ -78,7 +78,7 @@ jobs:
           echo "# image list"
           sudo lxc image list
           echo "# download image"
-          [ ${{ matrix.distribution }} == ubuntu ] || lxc image copy images:${distribution}/${version}/amd64 local: --alias=${distribution}-${version} || true
+          [ ${{ matrix.distribution }} == ubuntu ] || sudo lxc image copy images:${distribution}/${version}/amd64 local: --alias=${distribution}-${version} || true
           [ ${{ matrix.distribution }} == ubuntu ] && sudo lxc image copy ubuntu:${{ matrix.version }} local: --alias=${{ matrix.distribution }}-${{ matrix.version }} || true
           echo "# image list"
           sudo lxc image list
@@ -157,28 +157,27 @@ jobs:
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'cat /opt/atlassian/jira/current/logs/catalina.out'
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'ls -la /opt/atlassian/jira/current/logs/'
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'find /opt/atlassian/jira/current/logs/access_log.* -type f -exec tail -50 {} \;'
-          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'find /opt/atlassian/jira/current/logs/locahost.* -type f -exec tail -50 {} \;'
-          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'find /opt/atlassian/jira/current/logs/manager.* -type f -exec tail -50 {} \;'
+          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'find /opt/atlassian/jira/current/logs/locahost.* -type f -exec tail -50 {} \;' || true
+          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'find /opt/atlassian/jira/current/logs/manager.* -type f -exec tail -50 {} \;' || true
         if: ${{ always() }}
         continue-on-error: true
       - name: After script - curl
         run: |
           cd $GITHUB_WORKSPACE/juju4.jira2
-          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'curl -vk http://localhost'
-          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'curl -vk https://localhost'
-          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'curl -v http://localhost:8080'
-          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'curl -v http://localhost:8080/secure/SetupMode'
+          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'curl -vk http://localhost' || true
+          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'curl -vk https://localhost' || true
+          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'curl -v http://localhost:8080' || true
+          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'curl -v http://localhost:8080/secure/SetupMode' || true
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'curl -v http://localhost:8080/?a=b'
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'curl -v -X HEAD http://localhost:8080'
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'curl -v -H Referer:http://www.example.com -H X-Forwarded-For:127.0.0.128 http://localhost:8080'
-          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'curl -vk https://localhost'
         if: ${{ always() }}
         continue-on-error: true
       - name: After script - system
         run: |
           cd $GITHUB_WORKSPACE/juju4.jira2
-          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'netstat -anp'
-          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'ss -nlp'
+          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'netstat -anp' || true
+          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'ss -nlp' || true
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'systemctl -l --no-pager status apache2'
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'systemctl -l --no-pager status httpd'
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'systemctl -l --no-pager status httpd-init'
