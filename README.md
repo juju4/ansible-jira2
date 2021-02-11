@@ -1,5 +1,9 @@
 [![Build Status - Master](https://travis-ci.com/juju4/ansible-jira2.svg?branch=master)](https://travis-ci.com/juju4/ansible-jira2)
 [![Build Status - Devel](https://travis-ci.com/juju4/ansible-jira2.svg?branch=devel)](https://travis-ci.com/juju4/ansible-jira2/branches)
+
+[![Actions Status - Master](https://github.com/juju4/ansible-jira2/workflows/AnsibleCI/badge.svg)](https://github.com/juju4/ansible-jira2/actions?query=branch%3Amaster)
+[![Actions Status - Devel](https://github.com/juju4/ansible-jira2/workflows/AnsibleCI/badge.svg?branch=devel)](https://github.com/juju4/ansible-jira2/actions?query=branch%3Adevel)
+
 # Jira ansible role
 
 This role is a meta role to setup Jira in a sane and secure environment. Using
