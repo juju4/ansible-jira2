@@ -146,12 +146,14 @@ jobs:
         continue-on-error: true
       - name: After script - files
         run: |
+          cd $GITHUB_WORKSPACE/juju4.jira2
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'cat /opt/atlassian/jira/current/conf/server.xml'
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'cat /opt/atlassian/jira/current/conf/server.xml.*'
         if: ${{ always() }}
         continue-on-error: true
       - name: After script - logs
         run: |
+          cd $GITHUB_WORKSPACE/juju4.jira2
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'cat /opt/atlassian/jira/current/logs/catalina.out'
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'ls -la /opt/atlassian/jira/current/logs/'
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'find /opt/atlassian/jira/current/logs/access_log.* -type f -exec tail -50 {} \;'
@@ -161,6 +163,7 @@ jobs:
         continue-on-error: true
       - name: After script - curl
         run: |
+          cd $GITHUB_WORKSPACE/juju4.jira2
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'curl -vk http://localhost'
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'curl -vk https://localhost'
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'curl -v http://localhost:8080'
@@ -173,6 +176,7 @@ jobs:
         continue-on-error: true
       - name: After script - system
         run: |
+          cd $GITHUB_WORKSPACE/juju4.jira2
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'netstat -anp'
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'ss -nlp'
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'systemctl -l --no-pager status apache2'
