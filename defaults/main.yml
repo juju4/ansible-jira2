@@ -12,7 +12,7 @@ jira_keystore: "{{ jira_installdir }}/conf/jira.jks"
 jira_keystore_pass: jks_pass_to_change
 ## if not existing, self-signed certificate will be created
 jira_https_files_to_upload: []
-#jira_https_files_to_upload:
+# jira_https_files_to_upload:
 #  - jira.csr
 #  - jira.crt
 #  - root.crt
@@ -24,25 +24,25 @@ jira_https_dname: "CN=jira.dev,OU=Dev,O=MyCompany,L=MyCity,S=MyState,C=MyCountry
 ## reverse-proxy
 jira_dns_servername: jira.local
 jira_port: 80
-#jira_port: 443
+# jira_port: 443
 
 ## jira instance for reverse proxy
-#jira_context_path: "/jira"
+# jira_context_path: "/jira"
 jira_int_servername: localhost
 jira_int_port: 8080
 
 ## database (postgresql)
-#jira_dbbackend: 'postgres'
+# jira_dbbackend: 'postgres'
 jira_db: jiradb
 jira_db_user: jiradbuser
 jira_db_userpass: jiradbuserpass
 jira_jdbc_url: "jdbc:postgresql://localhost:5432/{{ jira_db }}"
 ## restore existing db?
-#jira_db_restorefile: /orchestrator/path/to/dump.sql
+# jira_db_restorefile: /orchestrator/path/to/dump.sql
 
 ## ActiveDirectory link?
 jira_link_activedirectory: false
-#jira_activedirectory_servercrt: server-certificate.crt
+# jira_activedirectory_servercrt: server-certificate.crt
 jira_activedirectory_servercrt: ''
 
 ## orchestrator file to import on jira keystore. must include AD crt if using one but can include TLS mail server or others
@@ -53,12 +53,12 @@ backupdir: /var/_backup
 scriptsdir: /usr/local/scripts
 
 ## firewall ?
-#jira_ufw: false
+# jira_ufw: false
 jira_ufw: true
 jira_ufw_if: eth0
-#jira_ufw_if: enp0s3
+# jira_ufw_if: enp0s3
 ## only affect incoming traffic
-#jira_ufw_default_policy: allow
+# jira_ufw_default_policy: allow
 jira_ufw_default_policy: deny
 jira_ufw_default_logging: medium
 jira_ufw_access:
@@ -71,17 +71,17 @@ jira_ufw_allow_ports_in:
 jira_ufw_out_logging: no
 jira_ufw_allow_ports_out:
   - 22
-#  - 25
+  # - 25
   - 53
   - 123
-## email/TLS?
+  ## email/TLS?
   - 587
-## web
+  ## web
   - 80
   - 443
-#  - 8080
-## using dhcp?
-#  - 67
+  # - 8080
+  ## using dhcp?
+  # - 67
 
 ## docker, lxc? (else dhclient will fail ...)
 jira_ufw_allow_if_out: []

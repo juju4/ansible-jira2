@@ -14,7 +14,7 @@
     state: present
     attribute: "{{ item.attr }}"
     value: "{{ item.val }}"
-#    backup: yes
+    # backup: yes
   with_items:
     - { attr: 'protocol', val: 'org.apache.coyote.http11.Http11NioProtocol' }
     - { attr: 'maxHttpHeaderSize', val: '8192' }
@@ -39,6 +39,6 @@
     state: present
     attribute: "{{ item.attr }}"
     value: "{{ item.val }}"
-#    backup: yes
+    # backup: yes
   with_items:
     - { attr: 'redirectPort', val: '8443' }

@@ -45,5 +45,5 @@
         - { n: "{{ backupdir }}/{{ jira_db_restorefile | basename }}" }
         - { n: "{{ backupdir }}" }
     - name: add restoration marker
-      file: "dest={{ backupdir }}/.psql_restore-{{ restorefile.stat.checksum }} state=touch"
+      file: "dest={{ backupdir }}/.psql_restore-{{ restorefile.stat.checksum }} mode=0600 state=touch"
   when: restorefile.stat.exists and not restored.stat.exists

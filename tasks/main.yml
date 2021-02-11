@@ -14,7 +14,7 @@
 - include: jira-postgresql.yml
   when: jira_dbbackend is defined and jira_dbbackend == 'postgres'
 
-#- include: jira-server_xml1.yml
+# - include: jira-server_xml1.yml
 - include: jira-server_xml2.yml
 
 - include: jira-reverseproxy.yml

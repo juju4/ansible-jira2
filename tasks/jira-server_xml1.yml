@@ -23,6 +23,6 @@
     state: present
     attribute: path
     value: "{{ jira_context_path | default('/') }}"
-#    backup: yes
+    # backup: yes
   notify:
     - restart jira

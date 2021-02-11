@@ -74,6 +74,7 @@
       copy:
         src: /lib/systemd/system/ufw.service
         dest: /etc/systemd/system/ufw.service
+        mode: '0644'
         remote_src: true
     - name: Set ufw systemd_string
       set_fact:
@@ -82,6 +83,7 @@
       lineinfile:
         dest: /etc/systemd/system/ufw.service
         line: "{{ item }}"
+        mode: '0644'
         insertafter: 'Before=network.target'
       with_items:
         - "Wants={{ systemd_string }}"

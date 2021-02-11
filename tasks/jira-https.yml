@@ -68,5 +68,5 @@
   register: keytoolcheck
 - debug: var=keytoolcheck.stdout_lines
 
-#- include: jira-https-server_xml1.yml
+# - include: jira-https-server_xml1.yml
 # no alternate as done by template of reverseproxy

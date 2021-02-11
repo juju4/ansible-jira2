@@ -14,6 +14,7 @@
   file:
     src: "{{ apache_sitedir }}/jira-vhost.conf"
     dest: "/etc/apache2/sites-enabled/jira-vhost.conf"
+    mode: '0644'
     state: link
   notify:
     - restart apache
@@ -51,4 +52,4 @@
     ansible_selinux.status is defined and
     ansible_selinux.status != 'disabled'
 
-#- name: Disable HTTP compression in Jira - GUI only???
+# - name: Disable HTTP compression in Jira - GUI only???
