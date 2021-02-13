@@ -79,7 +79,7 @@ jobs:
           sudo lxc image list
           echo "# download image"
           [ ${{ matrix.distribution }} == ubuntu ] || sudo lxc image copy images:${{ matrix.distribution }}/${{ matrix.version }}/amd64 local: --alias=${{ matrix.distribution }}-${{ matrix.version }}-nossh || true
-          [ "X${{ matrix.distribution }}" == "Xcentos" ] && sudo sh -x ./test/lxd/centos-ssh-image.sh ${{ matrix.version }} || true
+          [ "X${{ matrix.distribution }}" == "Xcentos" ] && cd $GITHUB_WORKSPACE/juju4.jira2 && sudo sh -x ./test/lxd/centos-ssh-image.sh ${{ matrix.version }} || true
           [ ${{ matrix.distribution }} == ubuntu ] && sudo lxc image copy ubuntu:${{ matrix.version }} local: --alias=${{ matrix.distribution }}-${{ matrix.version }} || true
           echo "# image list"
           sudo lxc image list
