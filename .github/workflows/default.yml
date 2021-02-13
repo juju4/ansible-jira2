@@ -79,7 +79,6 @@ jobs:
           sudo lxc image list
           echo "# download image"
           [ ${{ matrix.distribution }} == ubuntu ] || sudo lxc image copy images:${{ matrix.distribution }}/${{ matrix.version }}/amd64 local: --alias=${{ matrix.distribution }}-${{ matrix.version }}-nossh || true
-          [ "X${{ matrix.distribution }}" == "Xcentos" ] && cd $GITHUB_WORKSPACE/juju4.jira2 && sudo sh -x ./test/lxd/centos-ssh-image.sh ${{ matrix.version }} || true
           [ ${{ matrix.distribution }} == ubuntu ] && sudo lxc image copy ubuntu:${{ matrix.version }} local: --alias=${{ matrix.distribution }}-${{ matrix.version }} || true
           echo "# image list"
           sudo lxc image list
@@ -103,6 +102,7 @@ jobs:
           sudo zpool list
           sudo lxc profile device add default root disk path=/ pool=pool1
           sudo lxc profile show default
+          [ "X${{ matrix.distribution }}" == "Xcentos" ] && cd $GITHUB_WORKSPACE/juju4.jira2 && sudo sh -x ./test/lxd/centos-ssh-image.sh ${{ matrix.version }} || true
       - name: Install kitchen requirements
         run: |
           sudo gem install test-kitchen --version "=1.25.0"
