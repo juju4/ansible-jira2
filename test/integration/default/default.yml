@@ -3,8 +3,8 @@
 - hosts: all
   vars:
     - jira_reverseproxy: false
-    - jira_version: 8.5.5
-    - jira_archive_sha256sum: 2928a7a3c2d114308898f62416a4b10a99fa94624adaea8fce8311d70f9ba681
+    - jira_version: 8.13.3
+    - jira_archive_sha256sum: dddb048e7c8815dfa24383f1824d0d61d08cf704e0063046b207c9f8b5ab6c95
   pre_tasks:
     - name: Xenial+ | set fact
       set_fact:
