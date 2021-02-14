@@ -16,7 +16,6 @@ jobs:
       fail-fast: false
       max-parallel: 4
       matrix:
-        experimental: [false]
         include:
           - distribution: centos
             version: 8
@@ -28,14 +27,17 @@ jobs:
             version: 7
             version2: 7
             suite: default
+            experimental: false
           - distribution: ubuntu
             version: '20.04'
             version2: 2004
             suite: default
+            experimental: false
           - distribution: ubuntu
             version: '18.04'
             version2: 1804
             suite: default
+            experimental: false
     env:
       ANSIBLE_CALLBACK_WHITELIST: profile_tasks
       ANSIBLE_EXTRA_VARS: ""
