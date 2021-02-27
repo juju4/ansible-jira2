@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: jira
   author: juju4
   description: meta role to setup Jira in a sane and secure environment
   license: BSD
