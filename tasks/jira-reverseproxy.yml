@@ -21,7 +21,8 @@
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - block:
-    - debug: var=ansible_selinux
+    - name: Debug | ansible_selinux
+      debug: var=ansible_selinux
     - name: RedHat7- | ensure selinux dependency is present
       yum:
         name:

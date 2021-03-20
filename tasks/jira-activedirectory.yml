@@ -3,4 +3,5 @@
 ## https://confluence.atlassian.com/jira/configuring-an-ssl-connection-to-active-directory-229838539.html
 ## see also jira-import-crt.yml
 
-- debug: msg="Most of ActiveDirectory configuration seems to be Web UI only..."
+- name: INFO
+  debug: msg="Most of ActiveDirectory configuration seems to be Web UI only..."

@@ -66,7 +66,8 @@
     executable: /bin/bash
   changed_when: false
   register: keytoolcheck
-- debug: var=keytoolcheck.stdout_lines
+- name: Debug | keytool output
+  debug: var=keytoolcheck.stdout_lines
 
 # - include: jira-https-server_xml1.yml
 # no alternate as done by template of reverseproxy

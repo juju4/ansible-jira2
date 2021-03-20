@@ -33,7 +33,8 @@
   register: pkg_result
   until: pkg_result is success
 
-- meta: flush_handlers
+- name: Flush handlers
+  meta: flush_handlers
 
 - name: Ensure Jira has finished to initialize
   wait_for:
