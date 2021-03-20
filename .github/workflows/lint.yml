@@ -1,0 +1,47 @@
+---
+name: lint
+
+on:
+  push:
+  pull_request:
+  schedule:  # run weekly, every Monday 09:00
+    - cron: '0 9 * * 1'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: juju4.jira2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install ansible-lint flake8 yamllint ansible
+          which ansible
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          which ansible
+          ansible --version
+          cd $GITHUB_WORKSPACE/juju4.jira2
+          [ -f get-dependencies.sh ] && sh -x get-dependencies.sh
+          { echo '[defaults]'; echo 'callback_whitelist = profile_tasks, timer'; echo 'roles_path = ../'; echo 'ansible_python_interpreter: /usr/bin/python3'; } >> ansible.cfg
+      - name: Environment
+        run: |
+          pwd
+          env
+          find -ls
+      - name: yamllint
+        run: |
+          cd $GITHUB_WORKSPACE/juju4.jira2 && yamllint .
+      - name: ansible-lint
+        run: |
+          cd $GITHUB_WORKSPACE/juju4.jira2 && ansible-lint
