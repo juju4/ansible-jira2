@@ -6,7 +6,7 @@ set :backend, :exec
 describe service('postgresql') do
   it { should be_enabled   }
   it { should be_running   }
-end  
+end
 
 describe process("postgres") do
   its(:user) { should eq "postgres" }
@@ -50,4 +50,3 @@ end
 describe file('/var/lib/pgsql/data/pg_hba.conf'), :if => os[:family] == 'redhat' do
   it { should be_file }
 end
-

@@ -13,7 +13,7 @@ set :backend, :exec
 describe service('apache2') do
   it { should be_enabled }
   it { should be_running }
-end  
+end
 
 describe command('apache2ctl -M') do
   its(:stdout) { should match /proxy/ }

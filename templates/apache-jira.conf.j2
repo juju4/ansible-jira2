@@ -13,11 +13,11 @@ Listen 443 https
     ProxyRequests Off
     ProxyVia Off
     ProxyPreserveHost       On
-     
+
     <Proxy *>
          Require all granted
     </Proxy>
- 
+
     ProxyPass {{ jira_contextpath | default('/') }} http://{{ jira_int_servername }}:{{ jira_int_port }}{{ jira_contextpath | default('/') }}
     ProxyPassReverse {{ jira_contextpath | default('/') }} http://{{ jira_int_servername }}:{{ jira_int_port }}{{ jira_contextpath | default('/') }}
 

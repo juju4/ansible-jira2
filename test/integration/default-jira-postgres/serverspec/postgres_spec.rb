@@ -61,4 +61,3 @@ end
 describe file("#{var_dir}/data/pg_hba.conf"), :if => os[:family] == 'redhat' do
   it { should be_file }
 end
-

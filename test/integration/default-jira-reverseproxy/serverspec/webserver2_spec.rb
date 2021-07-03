@@ -29,4 +29,3 @@ describe command('curl -kvL http://localhost/doesnotexist') do
   its(:stderr) { should match /HTTP\/1.1 503/ }
   its(:stdout) { should match "" }
 end
-

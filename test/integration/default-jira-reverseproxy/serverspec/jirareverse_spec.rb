@@ -14,4 +14,3 @@ describe command('curl -vL http://localhost') do
   its(:stdout) { should match /Set up and configure your Jira instance manually/ }
   its(:exit_status) { should eq 0 }
 end
-

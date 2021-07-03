@@ -18,7 +18,7 @@ end
 describe service('jira') do
   it { should be_enabled }
   it { should be_running }
-end  
+end
 
 describe command('java -version') do
   its(:stderr) { should match /#{java_version}/ }
