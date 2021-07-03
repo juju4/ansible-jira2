@@ -34,7 +34,6 @@
         - "vacuumdb --dbname=\"{{ jira_db }}\" --analyze --verbose"
       become: yes
       become_user: postgres
-      ignore_errors: true
     - name: start jira service after db restore
       service:
         name: jira
