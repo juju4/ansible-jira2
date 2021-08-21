@@ -5,8 +5,8 @@
     - jira_reverseproxy: true
     - jira_port: 443
     - jira_dbbackend: postgres
-    - jira_version: 8.13.3
-    - jira_archive_sha256sum: dddb048e7c8815dfa24383f1824d0d61d08cf704e0063046b207c9f8b5ab6c95
+    - jira_version: 8.13.10
+    - jira_archive_sha256sum: bd77c2cfb720393bd709ceb63d7ca4f6f240ea54987831521d8537ad73e47896
     # geerlingguy.apache
     - apache_mods_enabled:
         - rewrite.load
