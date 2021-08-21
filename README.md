@@ -84,6 +84,8 @@ $ packer build -only=digitalocean packer-*.json
 
 ## Troubleshooting & Known issues
 
+* Jira Server is [End of Sales since Feb 2021](https://www.atlassian.com/migration/journey-to-cloud) and will be End of Support in Feb 2024.
+
 * JIRA recommends C.UTF-8, POSIX.UTF-8 or C for postgres lc_collate per https://confluence.atlassian.com/jirakb/how-to-fix-the-collation-of-a-postgres-jira-database-776657961.html.
 C.UTF-8 is fine on Ubuntu by default but not on RedHat, so using customized role manala.locales to configure POSIX.UTF-8 for RedHat but not Ubuntu (not available)
 
