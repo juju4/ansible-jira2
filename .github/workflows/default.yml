@@ -23,11 +23,6 @@ jobs:
             suite: default
             # for unknown reason, stalling at the end of the role
             experimental: true
-          - distribution: centos
-            version: 7
-            version2: 7
-            suite: default
-            experimental: false
           - distribution: ubuntu
             version: '20.04'
             version2: 2004
