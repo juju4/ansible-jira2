@@ -3,26 +3,19 @@
 - hosts: all
   vars:
     - jira_reverseproxy: false
-    - jira_version: 8.13.10
-    - jira_archive_sha256sum: bd77c2cfb720393bd709ceb63d7ca4f6f240ea54987831521d8537ad73e47896
+    # https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-core-8.20.0.tar.gz
+    - jira_version: 8.20.0
+    - jira_archive_sha256sum: 5717d2a08627f61e5f604ad082daa976c0f3f03ac498011de7cef643edc16113
   pre_tasks:
-    - name: Xenial+ | set fact
-      set_fact:
-        # Jira 7.6.11+ supports openjdk-8 only, upcoming 8.2+ will support both openjdk-8 and 11
-        # https://community.atlassian.com/t5/Agile-articles/Java-11-OpenJDK-support-update-for-Server-and-Data-Center/ba-p/967836
-        java_packages:
-          - openjdk-8-jdk
-      when: ansible_distribution_release == 'xenial' or ansible_distribution_release == 'bionic'
     - name: RedHat7 | set fact
       set_fact:
-        java_packages:
-          - java-1.8.0-openjdk
+        # https://www.postgresql.org/download/linux/redhat/
         postgresql_repo: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-        postgresql_pkgnames: ['postgresql96-server']
-        postgresql_data_dir: '/var/lib/pgsql/9.6/data'
-        postgresql_bin_path: '/usr/pgsql-9.6/bin'
-        postgresql_config_path: '/var/lib/pgsql/9.6/data'
-        postgresql_daemon: 'postgresql-9.6'
+        postgresql_pkgnames: ['postgresql12-server']
+        postgresql_data_dir: '/var/lib/pgsql/12/data'
+        postgresql_bin_path: '/usr/pgsql-12/bin'
+        postgresql_config_path: '/var/lib/pgsql/12/data'
+        postgresql_daemon: 'postgresql-12'
       when: ansible_os_family == "RedHat" and ansible_distribution_version.split('.')[0] == '7'
   roles:
     - juju4.jira2
