@@ -150,6 +150,9 @@ jobs:
           cd $GITHUB_WORKSPACE/juju4.jira2
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'cat /opt/atlassian/jira/current/conf/server.xml'
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'cat /opt/atlassian/jira/current/conf/server.xml.*'
+          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'cat /opt/atlassian/jira/current/bin/setenv.sh'
+          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'cat /opt/atlassian/jira/current/bin/set-gc-params.sh'
+          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'grep -rin PrintGCDateStamps /opt/atlassian/jira/ /etc/'
         if: ${{ always() }}
         continue-on-error: true
       - name: After script - logs
