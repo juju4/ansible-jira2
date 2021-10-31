@@ -7,6 +7,9 @@
   include_vars: "RedHat-{{ ansible_distribution_version.split('.')[0] }}.yml"
   when: ansible_os_family == "RedHat"
 
+- import_tasks: jira-java11-fix.yml
+  when: jira_version == '8.20.0'
+
 - include: backup-restore.yml
 
 - include: security.yml
