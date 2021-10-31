@@ -8,7 +8,7 @@
   when: ansible_os_family == "RedHat"
 
 - import_tasks: jira-java11-fix.yml
-  when: jira_version == '8.20.0'
+  when: jira_version == '8.20.0' and ansible_os_family == "Debian"
 
 - include: backup-restore.yml
 
