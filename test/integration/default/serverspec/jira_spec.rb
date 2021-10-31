@@ -11,6 +11,8 @@ set :backend, :exec
 
 if (os[:family] == 'ubuntu' && os[:release] == '20.04')
   set java_version = '11.0'
+elsif (os[:family] == 'ubuntu' && os[:release] == '18.04')
+  set java_version = '11.0'
 else
   set java_version = '1.8'
 end
