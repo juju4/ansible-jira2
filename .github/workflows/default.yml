@@ -18,8 +18,8 @@ jobs:
       matrix:
         include:
           - distribution: centos
-            version: 8
-            version2: 8
+            version: 8-Stream
+            version2: 8-Stream
             suite: default
             # for unknown reason, stalling at the end of the role
             experimental: true
