@@ -28,7 +28,7 @@
         name: jira
         state: stopped
     - name: restore database
-      command: "{{ item }}"
+      command: "{{ item }}"  # noqa no-changed-when
       with_items:
         - "psql --set ON_ERROR_STOP=off -f {{ backupdir }}/{{ jira_db_restorefile | basename }} \"{{ jira_db }}\""
         - "vacuumdb --dbname=\"{{ jira_db }}\" --analyze --verbose"
