@@ -69,5 +69,5 @@
 - name: Debug | keytool output
   debug: var=keytoolcheck.stdout_lines
 
-# - include: jira-https-server_xml1.yml
+# - import_tasks: jira-https-server_xml1.yml
 # no alternate as done by template of reverseproxy

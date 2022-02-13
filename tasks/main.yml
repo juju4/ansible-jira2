@@ -10,25 +10,25 @@
 - import_tasks: jira-java11-fix.yml
   when: jira_version == '8.20.0' and ansible_os_family == "Debian"
 
-- include: backup-restore.yml
+- import_tasks: backup-restore.yml
 
-- include: security.yml
+- import_tasks: security.yml
 
-- include: jira-postgresql.yml
+- import_tasks: jira-postgresql.yml
   when: jira_dbbackend is defined and jira_dbbackend == 'postgres'
 
-# - include: jira-server_xml1.yml
-- include: jira-server_xml2.yml
+# - import_tasks: jira-server_xml1.yml
+- import_tasks: jira-server_xml2.yml
 
-- include: jira-reverseproxy.yml
+- import_tasks: jira-reverseproxy.yml
   when: jira_reverseproxy|bool
 
-- include: jira-https.yml
+- import_tasks: jira-https.yml
   when: jira_https|bool
 
-- include: jira-import-crt.yml
+- import_tasks: jira-import-crt.yml
 
-- include: jira-activedirectory.yml
+- import_tasks: jira-activedirectory.yml
   when: jira_link_activedirectory|bool
 
 - name: install curl for serverspec testing

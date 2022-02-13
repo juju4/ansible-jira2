@@ -13,5 +13,5 @@
   notify:
     - restart jira
 
-- include: restore.yml
+- import_tasks: restore.yml
   when: jira_db_restorefile is defined and jira_db_restorefile|string

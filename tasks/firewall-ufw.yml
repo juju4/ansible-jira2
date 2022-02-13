@@ -1,6 +1,6 @@
 ---
 
-- include: logging.yml
+- import_tasks: logging.yml
 
 ## Centos7: requires EPEL
 - name: install ufw
