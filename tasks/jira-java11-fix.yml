@@ -17,5 +17,13 @@
         re: 'JVM_EXTRA_ARGS=".*"',
         rep: 'JVM_EXTRA_ARGS="-Xlog:gc*:file=/opt/atlassian/jira/current/logs/atlassian-jira-gc-%t.log:tags,time,uptime,level:filecount=5,filesize=20M -XX:-OmitStackTraceInFastThrow -XX:+IgnoreUnrecognizedVMOptions"'
     }
+    - { d: /opt/atlassian/jira/current/bin/set-gc-params.sh,
+        re: '-XX:\+PrintGCDateStamps -XX:\+PrintGCTimeStamps',
+        rep: ''
+    }
+    - { d: /opt/atlassian/jira/current/bin/setenv.sh,
+        re: '-XX:\+PrintGCDateStamps',
+        rep: ''
+    }
   notify:
     - restart jira
