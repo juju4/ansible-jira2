@@ -1,0 +1,125 @@
+---
+name: default-bare
+
+on:
+  push:
+  pull_request:
+  schedule:  # run weekly, every Monday 09:00
+    - cron: '0 9 * * 1'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        include:
+          - os: ubuntu-latest
+            experimental: false
+          - os: ubuntu-18.04
+            experimental: false
+    env:
+      ANSIBLE_CALLBACKS_ENABLED: profile_tasks
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: juju4.jira2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install ansible-lint flake8 yamllint
+          which ansible
+          pip3 install ansible
+          pip3 show ansible
+          ls -l $HOME/.local/bin || true
+          ls -l /opt/hostedtoolcache/Python/3.9.1/x64/bin || true
+          echo "/opt/hostedtoolcache/Python/3.9.1/x64/bin" >> $GITHUB_PATH
+          ansible --version
+          cd $GITHUB_WORKSPACE/juju4.jira2
+          [ -f get-dependencies.sh ] && sh -x get-dependencies.sh
+          { echo '[defaults]'; echo 'callbacks_enabled = profile_tasks, timer'; echo 'roles_path = ../'; echo 'ansible_python_interpreter: /usr/bin/python3'; } >> ansible.cfg
+      - name: Environment
+        run: |
+          pwd
+          env
+          find -ls
+      - name: Before script - systemctl
+        run: |
+          systemd-analyze security || true
+          systemctl status --all --no-pager || true
+      - name: run test
+        run: |
+          cd $GITHUB_WORKSPACE/juju4.jira2 && ansible-playbook -i localhost, --connection=local --become -vvv test/integration/default/default.yml
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+      - name: idempotency run
+        run: |
+          cd $GITHUB_WORKSPACE/juju4.jira2 && ansible-playbook -i localhost, --connection=local --become -vvv test/integration/default/default.yml | tee /tmp/idempotency.log | grep -q 'changed=0.*failed=0'  && (echo 'Idempotence test: pass' && exit 0)  || (echo 'Idempotence test: fail' && cat /tmp/idempotency.log && exit 1)
+      - name: On failure
+        run: |
+          systemctl -l --no-pager status
+        if: env.WORKFLOW_CONCLUSION == 'failure'  # notify only if failure
+      - name: After script - systemctl
+        run: |
+          systemd-analyze security || true
+          systemctl --failed || true
+          systemctl status jira || true
+          systemctl status --all --no-pager || true
+        if: ${{ always() }}
+        continue-on-error: true
+      - name: After script - resulting config
+        run: |
+          find /etc/systemd/system/*.service.d/ -type f -exec cat {} \;
+        if: ${{ always() }}
+        continue-on-error: true
+      - name: After script - files
+        run: |
+          cat /opt/atlassian/jira/current/conf/server.xml
+          cat /opt/atlassian/jira/current/conf/server.xml.*
+          cat /opt/atlassian/jira/current/bin/setenv.sh
+          cat /opt/atlassian/jira/current/bin/set-gc-params.sh
+          grep -rin PrintGCDateStamps /opt/atlassian/jira/ /etc/
+        if: ${{ always() }}
+        continue-on-error: true
+      - name: After script - logs
+        run: |
+          cat /opt/atlassian/jira/current/logs/catalina.out
+          ls -la /opt/atlassian/jira/current/logs/
+          find /opt/atlassian/jira/current/logs/access_log.* -type f -exec tail -50 {} \;
+          find /opt/atlassian/jira/current/logs/locahost.* -type f -exec tail -50 {} \; || true
+          find /opt/atlassian/jira/current/logs/manager.* -type f -exec tail -50 {} \; || true
+        if: ${{ always() }}
+        continue-on-error: true
+      - name: After script - curl
+        run: |
+          curl -vk http://localhost || true
+          curl -vk https://localhost || true
+          curl -v http://localhost:8080 || true
+          curl -v http://localhost:8080/secure/SetupMode || true
+          curl -v http://localhost:8080/?a=b || true
+          curl -v -X HEAD http://localhost:8080 || true
+          curl -v -H Referer:http://www.example.com -H X-Forwarded-For:127.0.0.128 http://localhost:8080 || true
+        if: ${{ always() }}
+        continue-on-error: true
+      - name: After script - system
+        run: |
+          netstat -anp' || true
+          ss -nlp' || true
+          systemctl -l --no-pager status apache2 || true
+          systemctl -l --no-pager status httpd || true
+          systemctl -l --no-pager status httpd-init || true
+          systemctl -l --no-pager status
+          journalctl -xe --no-pager
+          cat /etc/locale.conf
+          localectl status
+          localectl --no-pager list-locales
+        if: ${{ always() }}
+        continue-on-error: true
