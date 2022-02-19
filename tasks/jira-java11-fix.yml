@@ -1,6 +1,7 @@
 ---
 
 # https://confluence.atlassian.com/jirakb/garbage-collection-log-settings-for-jira-when-using-java-version-11-981148994.html
+# https://confluence.atlassian.com/confkb/unrecognized-jvm-gc-options-when-using-java-11-1002472841.html
 - name: Java 11 Garbage Collectors settings fix - 8.20.0
   replace:
     dest: "{{ item.d }}"
@@ -10,11 +11,11 @@
   loop:
     - { d: /opt/atlassian/jira/current/bin/set-gc-params.sh,
         re: 'GC_JVM_PARAMETERS=".* ${GC_JVM_PARAMETERS}"',
-        rep: 'GC_JVM_PARAMETERS="-Xlog:gc*:file=/opt/atlassian/jira/current/logs/atlassian-jira-gc-%t.log:tags,time,uptime,level:filecount=5,filesize=20M ${GC_JVM_PARAMETERS}"'
+        rep: 'GC_JVM_PARAMETERS="-Xlog:gc*:file=/opt/atlassian/jira/current/logs/atlassian-jira-gc-%t.log:tags,time,uptime,level:filecount=5,filesize=20M ${GC_JVM_PARAMETERS} -XX:+IgnoreUnrecognizedVMOptions"'
     }
     - { d: /opt/atlassian/jira/current/bin/setenv.sh,
         re: 'JVM_EXTRA_ARGS=".*"',
-        rep: 'JVM_EXTRA_ARGS="-Xlog:gc*:file=/opt/atlassian/jira/current/logs/atlassian-jira-gc-%t.log:tags,time,uptime,level:filecount=5,filesize=20M -XX:-OmitStackTraceInFastThrow"'
+        rep: 'JVM_EXTRA_ARGS="-Xlog:gc*:file=/opt/atlassian/jira/current/logs/atlassian-jira-gc-%t.log:tags,time,uptime,level:filecount=5,filesize=20M -XX:-OmitStackTraceInFastThrow -XX:+IgnoreUnrecognizedVMOptions"'
     }
   notify:
     - restart jira
