@@ -25,5 +25,13 @@
         re: '-XX:\+PrintGCDateStamps',
         rep: ''
     }
+    - { d: "/opt/atlassian/jira/atlassian-jira-core-{{ jira_version }}-standalone/bin/set-gc-params.sh",
+        re: '-XX:\+PrintGCDateStamps -XX:\+PrintGCTimeStamps',
+        rep: ''
+    }
+    - { d: "/opt/atlassian/jira/atlassian-jira-core-{{ jira_version }}-standalone/bin/setenv.sh",
+        re: '-XX:\+PrintGCDateStamps',
+        rep: ''
+    }
   notify:
     - restart jira
