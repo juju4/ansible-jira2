@@ -3,7 +3,7 @@
 ## https://confluence.atlassian.com/adminjiraserver071/integrating-jira-with-apache-using-ssl-802593043.html
 
 - name: setup jira reverse-proxy configuration
-  template:
+  ansible.builtin.template:
     src: apache-jira.conf.j2
     dest: "{{ apache_sitedir }}/jira-vhost.conf"
     mode: '0644'
@@ -11,7 +11,7 @@
   notify:
     - restart apache
 - name: Debian | enable jira configuration
-  file:
+  ansible.builtin.file:
     src: "{{ apache_sitedir }}/jira-vhost.conf"
     dest: "/etc/apache2/sites-enabled/jira-vhost.conf"
     mode: '0644'
@@ -22,9 +22,9 @@
 
 - block:
     - name: Debug | ansible_selinux
-      debug: var=ansible_selinux
+      ansible.builtin.debug: var=ansible_selinux
     - name: RedHat7- | ensure selinux dependency is present
-      yum:
+      ansible.builtin.yum:
         name:
           - libselinux-python
           - libsemanage-python
@@ -34,7 +34,7 @@
       when: ansible_distribution_major_version|int < 8
 
     - name: RedHat8+ | Ensure selinux dependencies are present
-      package:
+      ansible.builtin.package:
         name:
           - python3-libselinux
           - python3-libsemanage

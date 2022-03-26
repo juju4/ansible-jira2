@@ -3,7 +3,7 @@
 ## http://docs.oracle.com/javase/1.5.0/docs/tooldocs/solaris/keytool.html
 
 - name: Upload certificates files
-  copy:
+  ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ jira_installdir }}/conf/{{ item | basename }}"
     mode: '0400'
@@ -11,7 +11,7 @@
   with_items: "{{ jira_https_files_to_upload }}"
 
 - name: Create keystore
-  command: >
+  ansible.builtin.command: >
     keytool -genkey -alias jira -keyalg RSA -keystore {{ jira_keystore }}
         -storepass {{ jira_keystore_pass }} -validity 360 -keysize 2048
   args:
@@ -19,7 +19,7 @@
 
 - block:
     - name: Create CSR
-      command: >
+      ansible.builtin.command: >
         keytool -certreq -keyalg RSA -alias jira -keystore {{ jira_keystore }}
             -storepass {{ jira_keystore_pass }} -file {{ jira_https_csr }}
             -dname {{ jira_https_dname }} -noprompt
@@ -27,20 +27,20 @@
         creates: "{{ jira_https_csr }}"
 
     - name: Check if have root certificate
-      stat: path="{{ jira_https_rootcert }}"
+      ansible.builtin.stat: path="{{ jira_https_rootcert }}"
       register: rootcert
     - name: Import root certificate
-      command: >
+      ansible.builtin.command: >
         keytool -import -alias rootCA -keystore {{ jira_keystore }}
             -storepass {{ jira_keystore_pass }} -trustcacerts
             -file {{ jira_https_rootcert }}
       when: rootcert.stat.exists
 
     - name: Check if have signed certificate
-      stat: path="{{ jira_https_crt }}"
+      ansible.builtin.stat: path="{{ jira_https_crt }}"
       register: crt
     - name: Import signed certificate
-      command: >
+      ansible.builtin.command: >
         keytool -import -alias jira -keystore {{ jira_keystore }}
             -storepass {{ jira_keystore_pass }}
             -file {{ jira_https_crt }}
@@ -49,7 +49,7 @@
 
 - block:
     - name: Generating self-signed certificate
-      command: >
+      ansible.builtin.command: >
         keytool -selfcert -keyalg RSA -alias jira -keystore {{ jira_keystore }}
             -storepass {{ jira_keystore_pass }} -file {{ jira_https_csr }}
             -dname {{ jira_https_dname }} -noprompt
@@ -58,7 +58,7 @@
   when: jira_https_files_to_upload == []
 
 - name: Verify the certificate exists within the keystore
-  shell: >
+  ansible.builtin.shell: >
     set -o pipefail &&
     keytool -list -alias jira -keystore {{ jira_keystore }}
         -storepass {{ jira_keystore_pass }} | grep PrivateKeyEntry
@@ -67,7 +67,7 @@
   changed_when: false
   register: keytoolcheck
 - name: Debug | keytool output
-  debug: var=keytoolcheck.stdout_lines
+  ansible.builtin.debug: var=keytoolcheck.stdout_lines
 
 # - import_tasks: jira-https-server_xml1.yml
 # no alternate as done by template of reverseproxy

@@ -1,7 +1,7 @@
 ---
 
 - name: Upload certificates
-  copy:
+  ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ jira_homedir }}/{{ item | basename }}"
     mode: '0644'
@@ -9,7 +9,7 @@
   with_items: "{{ jira_keystore_cert_import }}"
 
 - name: Import Certificate into jira keystore  # noqa 301
-  command: >
+  ansible.builtin.command: >
     keytool -importcert -keystore ./jre/lib/security/cacerts
         -file "{{ jira_homedir }}/{{ item | basename }}"
         -storepass "{{ jira_keystore_storepass | default('changeit') }}" -noprompt

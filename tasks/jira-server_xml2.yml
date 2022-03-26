@@ -1,7 +1,7 @@
 ---
 
 - name: Configure Jira server.xml
-  template:
+  ansible.builtin.template:
     src: server.xml.j2
     dest: "{{ jira_installdir }}/conf/server.xml"
     mode: '0644'

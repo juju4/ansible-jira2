@@ -3,7 +3,7 @@
 # https://confluence.atlassian.com/jirakb/garbage-collection-log-settings-for-jira-when-using-java-version-11-981148994.html
 # https://confluence.atlassian.com/confkb/unrecognized-jvm-gc-options-when-using-java-11-1002472841.html
 - name: Java 11 Garbage Collectors settings fix - 8.20.0
-  replace:
+  ansible.builtin.replace:
     dest: "{{ item.d }}"
     regexp: "{{ item.re }}"
     replace: "{{ item.rep }}"

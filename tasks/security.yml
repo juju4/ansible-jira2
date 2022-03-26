@@ -2,7 +2,7 @@
 ## https://confluence.atlassian.com/adminjiraserver071/server-optimization-802593159.html
 
 - name: Restrict some path with robots.txt
-  template:
+  ansible.builtin.template:
     src: robots.txt.j2
     dest: "{{ jira_installdir }}/robots.txt"
     mode: '0644'

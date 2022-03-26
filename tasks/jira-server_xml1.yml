@@ -1,15 +1,15 @@
 ---
 
 - name: Ensure python-lxml is present
-  package:
+  ansible.builtin.package:
     name: python-lxml
     state: present
 
 - name: check if have a jira server.xml backup
-  stat: path="{{ jira_installdir }}/conf/server.xml.orig"
+  ansible.builtin.stat: path="{{ jira_installdir }}/conf/server.xml.orig"
   register: backup
 - name: backup jira server.xml
-  copy:
+  ansible.builtin.copy:
     src: "{{ jira_installdir }}/conf/server.xml"
     dest: "{{ jira_installdir }}/conf/server.xml.orig"
     mode: '0400'

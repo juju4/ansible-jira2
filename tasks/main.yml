@@ -1,10 +1,10 @@
 ---
 
 - name: Include version-specific variables for Ubuntu.
-  include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml"
+  ansible.builtin.include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml"
   when: ansible_os_family == "Debian"
 - name: Include version-specific variables for RedHat
-  include_vars: "RedHat-{{ ansible_distribution_version.split('.')[0] }}.yml"
+  ansible.builtin.include_vars: "RedHat-{{ ansible_distribution_version.split('.')[0] }}.yml"
   when: ansible_os_family == "RedHat"
 
 - import_tasks: jira-java11-fix.yml
@@ -35,15 +35,15 @@
   when: jira_link_activedirectory|bool
 
 - name: install curl for serverspec testing
-  package: name=curl state=present
+  ansible.builtin.package: name=curl state=present
   register: pkg_result
   until: pkg_result is success
 
 - name: Flush handlers
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
 
 - name: Ensure Jira has finished to initialize
-  wait_for:
+  ansible.builtin.wait_for:
     port: "{{ jira_int_port }}"
     delay: 15
   register: w1
@@ -51,11 +51,11 @@
 
 - block:
     - name: 2nd jira restart
-      service:
+      ansible.builtin.service:
         name: jira
         state: restarted
     - name: Ensure Jira has finished to initialize 2
-      wait_for:
+      ansible.builtin.wait_for:
         port: "{{ jira_int_port }}"
         delay: 15
   when: w1 is failed

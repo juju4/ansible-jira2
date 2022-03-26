@@ -1,7 +1,7 @@
 ---
 
 - name: Ensure python-lxml is present
-  package:
+  ansible.builtin.package:
     name: python-lxml
     state: present
 

@@ -4,7 +4,7 @@
 
 ## Centos7: requires EPEL
 - name: install ufw
-  package: name=ufw state=present
+  ansible.builtin.package: name=ufw state=present
   register: pkg_result
   until: pkg_result is success
 
@@ -59,28 +59,28 @@
     policy: "{{ jira_ufw_default_policy }}"
     log: yes
 - name: ufw | check current status
-  command: "ufw status verbose"
+  ansible.builtin.command: "ufw status verbose"
   register: ufwstatus
   changed_when: false
 - name: ufw | default policy (outgoing)
-  command: "ufw default {{ jira_ufw_default_policy }} outgoing"
+  ansible.builtin.command: "ufw default {{ jira_ufw_default_policy }} outgoing"
   when: ufwstatus.stdout.find(jira_ufw_default_policy + ' (outgoing)') == -1
 
 - block:
     - name: check if custom ufw.service file
-      stat: path=/etc/systemd/system/ufw.service
+      ansible.builtin.stat: path=/etc/systemd/system/ufw.service
       register: svc
     - name: creating custom ufw.service
-      copy:
+      ansible.builtin.copy:
         src: /lib/systemd/system/ufw.service
         dest: /etc/systemd/system/ufw.service
         mode: '0644'
         remote_src: true
     - name: Set ufw systemd_string
-      set_fact:
+      ansible.builtin.set_fact:
         systemd_string: "{% for i in jira_ufw_vpn %}sys-devices-virtual-net-{{ i }}.device {% endfor %}"
     - name: ensure vpn interface are presents in ufw.service
-      lineinfile:
+      ansible.builtin.lineinfile:
         dest: /etc/systemd/system/ufw.service
         line: "{{ item }}"
         mode: '0644'
