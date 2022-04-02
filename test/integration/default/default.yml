@@ -7,6 +7,10 @@
     - jira_version: 8.20.0
     - jira_archive_sha256sum: 5717d2a08627f61e5f604ad082daa976c0f3f03ac498011de7cef643edc16113
   pre_tasks:
+    - name: apt | Update cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
     - name: RedHat7 | set fact
       set_fact:
         # https://www.postgresql.org/download/linux/redhat/
