@@ -4,8 +4,8 @@
   vars:
     - jira_reverseproxy: true
     - jira_port: 80
-    - jira_version: 8.13.10
-    - jira_archive_sha256sum: bd77c2cfb720393bd709ceb63d7ca4f6f240ea54987831521d8537ad73e47896
+    - jira_version: 8.20.8
+    - jira_archive_sha256sum: 1e35cebc16104ab8b228940ab3728e47943c14ac7a03f6a6246dd6413ce1e6d8
     # geerlingguy.apache
     - apache_mods_enabled:
         - rewrite.load
