@@ -5,7 +5,7 @@
     - jira_reverseproxy: false
     - jira_dbbackend: postgres
     - jira_version: 8.20.8
-    - jira_archive_sha256sum: 1e35cebc16104ab8b228940ab3728e47943c14ac7a03f6a6246dd6413ce1e6d8
+    - jira_archive_sha256sum: 9f4de168e3f1cafaa2ccdfcaf041a25b9970e9ac328849f4174db66fe5608ead
     # geerlingguy.apache
     - apache_mods_enabled:
         - rewrite.load
