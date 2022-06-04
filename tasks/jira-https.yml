@@ -17,7 +17,8 @@
   args:
     creates: "{{ jira_keystore }}"
 
-- block:
+- name: jira_https_files_to_upload not empty
+  block:
     - name: Create CSR
       ansible.builtin.command: >
         keytool -certreq -keyalg RSA -alias jira -keystore {{ jira_keystore }}
@@ -47,7 +48,8 @@
       when: crt.stat.exists
   when: jira_https_files_to_upload != []
 
-- block:
+- name: jira_https_files_to_upload empty
+  block:
     - name: Generating self-signed certificate
       ansible.builtin.command: >
         keytool -selfcert -keyalg RSA -alias jira -keystore {{ jira_keystore }}

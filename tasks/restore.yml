@@ -13,7 +13,8 @@
   register: restored
   when: restorefile.stat.exists
 
-- block:
+- name: Restore
+  block:
     - name: ensure dest backup dir exists
       ansible.builtin.file: "dest={{ backupdir }} state=directory mode=0700"
     - name: push backup file to system
