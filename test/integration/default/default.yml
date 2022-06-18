@@ -13,6 +13,7 @@
       ansible.builtin.apt:
         update_cache: true
         cache_valid_time: 3600
+      when: ansible_os_family == "Debian"
     - name: RedHat7 | set fact
       set_fact:
         # https://www.postgresql.org/download/linux/redhat/
