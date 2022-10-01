@@ -1,11 +1,11 @@
 ---
 
-- name: restart jira
+- name: Restart jira
   ansible.builtin.service: name=jira state=restarted
 
-- name: restart apache
+- name: Restart apache
   ansible.builtin.service: name={{ apache_svc }} state=restarted
   when: not (ansible_virtualization_type is defined and ansible_virtualization_type == "docker")
 
-- name: restart rsyslog
+- name: Restart rsyslog
   ansible.builtin.service: name=rsyslog state=restarted

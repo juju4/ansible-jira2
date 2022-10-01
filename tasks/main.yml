@@ -34,7 +34,7 @@
 - import_tasks: jira-activedirectory.yml
   when: jira_link_activedirectory|bool
 
-- name: install curl for serverspec testing
+- name: Install curl for serverspec testing
   ansible.builtin.package: name=curl state=present
   register: pkg_result
   until: pkg_result is success

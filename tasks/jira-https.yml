@@ -17,7 +17,7 @@
   args:
     creates: "{{ jira_keystore }}"
 
-- name: jira_https_files_to_upload not empty
+- name: Jira_https_files_to_upload not empty
   block:
     - name: Create CSR
       ansible.builtin.command: >
@@ -28,7 +28,8 @@
         creates: "{{ jira_https_csr }}"
 
     - name: Check if have root certificate
-      ansible.builtin.stat: path="{{ jira_https_rootcert }}"
+      ansible.builtin.stat:
+        path: "{{ jira_https_rootcert }}"
       register: rootcert
     - name: Import root certificate
       ansible.builtin.command: >
@@ -38,7 +39,8 @@
       when: rootcert.stat.exists
 
     - name: Check if have signed certificate
-      ansible.builtin.stat: path="{{ jira_https_crt }}"
+      ansible.builtin.stat:
+        path: "{{ jira_https_crt }}"
       register: crt
     - name: Import signed certificate
       ansible.builtin.command: >
@@ -48,7 +50,7 @@
       when: crt.stat.exists
   when: jira_https_files_to_upload != []
 
-- name: jira_https_files_to_upload empty
+- name: Jira_https_files_to_upload empty
   block:
     - name: Generating self-signed certificate
       ansible.builtin.command: >

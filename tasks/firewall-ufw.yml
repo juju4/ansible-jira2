@@ -3,33 +3,33 @@
 - import_tasks: logging.yml
 
 ## Centos7: requires EPEL
-- name: install ufw
+- name: Install ufw
   ansible.builtin.package: name=ufw state=present
   register: pkg_result
   until: pkg_result is success
 
-- name: ufw | RedHat | requires ufw to be enabled before configuration
+- name: UFW | RedHat | requires ufw to be enabled before configuration
   ufw: state=enabled
   when: ansible_os_family == 'RedHat'
 
-- name: ufw | ensure logging medium is enabled
+- name: UFW | ensure logging medium is enabled
   ufw: logging={{ jira_ufw_default_logging }}
 
-- name: ufw | always allow ssh
+- name: UFW | always allow ssh
   ufw:
     rule: allow
     name: "{{ ufw_ssh_rulename }}"
     log: yes
 
-- name: ufw | allow access from defined networks
+- name: UFW | allow access from defined networks
   ufw: rule=allow src={{ item }}
   with_items: "{{ jira_ufw_access }}"
 
-- name: ufw | allow access from defined networks - with logging
+- name: UFW | allow access from defined networks - with logging
   ufw: rule=allow src={{ item }} log=yes
   with_items: "{{ jira_ufw_access_with_log }}"
 
-- name: ufw | allow incoming traffic for defined ports
+- name: UFW | allow incoming traffic for defined ports
   ufw:
     rule: allow
     interface: "{{ jira_ufw_if }}"
@@ -37,7 +37,7 @@
     to_port: "{{ item | string }}"
   with_items: "{{ jira_ufw_allow_ports_in }}"
 
-- name: ufw | allow {{ jira_ufw_if }} outgoing traffic for defined ports
+- name: UFW | allow outgoing traffic for defined ports - {{ jira_ufw_if }}
   ufw:
     rule: allow
     interface: "{{ jira_ufw_if }}"
@@ -46,32 +46,32 @@
     log: "{{ jira_ufw_out_logging }}"
   with_items: "{{ jira_ufw_allow_ports_out }}"
 
-- name: ufw | allow all outgoing traffic for defined interfaces
+- name: UFW | allow all outgoing traffic for defined interfaces
   ufw: rule=allow interface={{ item }} direction=out
   with_items: "{{ jira_ufw_allow_if_out }}"
 
 ## FIXME! ansible module only affect incoming traffic, not idempotent
 ## Note: keep last, especially if you block by default
-- name: ufw | default policy (incoming)
+- name: UFW | default policy (incoming)
   ufw:
     state: enabled
     direction: incoming
     policy: "{{ jira_ufw_default_policy }}"
     log: yes
-- name: ufw | check current status
+- name: UFW | check current status
   ansible.builtin.command: "ufw status verbose"
   register: ufwstatus
   changed_when: false
-- name: ufw | default policy (outgoing)
+- name: UFW | default policy (outgoing)
   ansible.builtin.command: "ufw default {{ jira_ufw_default_policy }} outgoing"
   when: ufwstatus.stdout.find(jira_ufw_default_policy + ' (outgoing)') == -1
 
 - name: Jira UFW and VPN
   block:
-    - name: check if custom ufw.service file
+    - name: Check if custom ufw.service file
       ansible.builtin.stat: path=/etc/systemd/system/ufw.service
       register: svc
-    - name: creating custom ufw.service
+    - name: Creating custom ufw.service
       ansible.builtin.copy:
         src: /lib/systemd/system/ufw.service
         dest: /etc/systemd/system/ufw.service
@@ -80,7 +80,7 @@
     - name: Set ufw systemd_string
       ansible.builtin.set_fact:
         systemd_string: "{% for i in jira_ufw_vpn %}sys-devices-virtual-net-{{ i }}.device {% endfor %}"
-    - name: ensure vpn interface are presents in ufw.service
+    - name: Ensure vpn interface are presents in ufw.service
       ansible.builtin.lineinfile:
         dest: /etc/systemd/system/ufw.service
         line: "{{ item }}"

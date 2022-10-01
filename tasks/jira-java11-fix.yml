@@ -26,4 +26,4 @@
         rep: '\1\2'
     }
   notify:
-    - restart jira
+    - Restart jira

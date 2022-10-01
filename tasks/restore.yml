@@ -9,41 +9,42 @@
   become: no
 
 - name: Check if restore file has already been restored
-  ansible.builtin.stat: path="{{ backupdir }}/.psql_restore-{{ restorefile.stat.checksum }}"
+  ansible.builtin.stat:
+    path: "{{ backupdir }}/.psql_restore-{{ restorefile.stat.checksum }}"
   register: restored
   when: restorefile.stat.exists
 
 - name: Restore
   block:
-    - name: ensure dest backup dir exists
+    - name: Ensure dest backup dir exists
       ansible.builtin.file: "dest={{ backupdir }} state=directory mode=0700"
-    - name: push backup file to system
+    - name: Push backup file to system
       ansible.builtin.copy: "src={{ jira_db_restorefile }} dest={{ backupdir }}/{{ jira_db_restorefile | basename }} mode=0600"
-    - name: give permissions to postgres user
+    - name: Give permissions to postgres user
       acl: "name={{ item.n }} entity=postgres etype=user permissions={{ item.p }} state=present"
       with_items:
         - { n: "{{ backupdir }}/{{ jira_db_restorefile | basename }}", p: "r--" }
         - { n: "{{ backupdir }}", p: "r-x" }
-    - name: stop jira service before db restore
+    - name: Stop jira service before db restore
       ansible.builtin.service:
         name: jira
         state: stopped
-    - name: restore database
+    - name: Restore database
       ansible.builtin.command: "{{ item }}"  # noqa no-changed-when
       with_items:
         - "psql --set ON_ERROR_STOP=off -f {{ backupdir }}/{{ jira_db_restorefile | basename }} \"{{ jira_db }}\""
         - "vacuumdb --dbname=\"{{ jira_db }}\" --analyze --verbose"
       become: yes
       become_user: postgres
-    - name: start jira service after db restore
+    - name: Start jira service after db restore
       ansible.builtin.service:
         name: jira
         state: started
-    - name: remove permissions to postgres user
+    - name: Remove permissions to postgres user
       acl: "name={{ item.n }} entity=postgres etype=user state=absent"
       with_items:
         - { n: "{{ backupdir }}/{{ jira_db_restorefile | basename }}" }
         - { n: "{{ backupdir }}" }
-    - name: add restoration marker
+    - name: Add restoration marker
       ansible.builtin.file: "dest={{ backupdir }}/.psql_restore-{{ restorefile.stat.checksum }} mode=0600 state=touch"
   when: restorefile.stat.exists and not restored.stat.exists

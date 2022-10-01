@@ -4,12 +4,12 @@ galaxy_info:
   author: juju4
   description: meta role to setup Jira in a sane and secure environment
   license: BSD
-  min_ansible_version: 2.0
+  min_ansible_version: '2.0'
   platforms:
     - name: EL
       versions:
-        - 7
-        - 8
+        - '7'
+        - '8'
     - name: Ubuntu
       versions:
         - trusty
@@ -19,7 +19,7 @@ galaxy_info:
   galaxy_tags:
     - development
 dependencies:
-  - juju4.redhat_epel
-  - geerlingguy.postgresql
-  - kbrebanov.jira
-  - cmprescott.xml
+  - role: juju4.redhat_epel
+  - role: geerlingguy.postgresql
+  - role: kbrebanov.jira
+  - role: cmprescott.xml

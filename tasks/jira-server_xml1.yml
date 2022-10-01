@@ -5,10 +5,10 @@
     name: python-lxml
     state: present
 
-- name: check if have a jira server.xml backup
+- name: Check if have a jira server.xml backup
   ansible.builtin.stat: path="{{ jira_installdir }}/conf/server.xml.orig"
   register: backup
-- name: backup jira server.xml
+- name: Backup jira server.xml
   ansible.builtin.copy:
     src: "{{ jira_installdir }}/conf/server.xml"
     dest: "{{ jira_installdir }}/conf/server.xml.orig"
@@ -25,4 +25,4 @@
     value: "{{ jira_context_path | default('/') }}"
     # backup: yes
   notify:
-    - restart jira
+    - Restart jira

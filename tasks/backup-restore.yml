@@ -3,24 +3,24 @@
 - name: Ensure scripts directory exists
   ansible.builtin.file: path={{ scriptsdir }} state=directory mode=0755
 
-- name: add backup script
+- name: Add backup script
   ansible.builtin.template: src=backup-jira.sh.j2 dest={{ scriptsdir }}/backup-jira.sh mode=0755
-- name: add restore script
+- name: Add restore script
   ansible.builtin.template: src=restore-jira.sh.j2 dest={{ scriptsdir }}/restore-jira.sh mode=0755
 
-- name: apt | ensure cron is installed
+- name: Debian | ensure cron is installed
   ansible.builtin.apt: name=cron state=present
   when: ansible_os_family == 'Debian'
   register: pkg_result
   until: pkg_result is success
 
-- name: yum | ensure cron is installed
+- name: Redhat | ensure cron is installed
   ansible.builtin.yum: name=crontabs state=present
   when: ansible_os_family == "RedHat"
   register: pkg_result
   until: pkg_result is success
 
-- name: setup cron backup
+- name: Setup cron backup
   ansible.builtin.cron: name="jira-backup" minute="3" hour="23" weekday="0"
     job="{{ scriptsdir }}/backup-jira.sh > /dev/null 2>&1"
     user=root

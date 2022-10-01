@@ -14,23 +14,23 @@
   ansible.builtin.package_facts:
     manager: auto
 
-- name: get rsyslog version
+- name: Get rsyslog version
   ansible.builtin.set_fact:
     rsyslog_v: "{{ ansible_facts.packages['rsyslog'][0]['version'] }}"
 
 - name: Debug | rsyslog version
   ansible.builtin.debug: var=rsyslog_v verbosity=1
 
-- name: ensure /etc/rsyslog.d exists
+- name: Ensure /etc/rsyslog.d exists
   ansible.builtin.file: dest=/etc/rsyslog.d state=directory mode=0755
 
-- name: send ufw log to separate file through rsyslog
+- name: Send ufw log to separate file through rsyslog
   ansible.builtin.template: src=rsyslog-ufw.conf.j2 dest=/etc/rsyslog.d/49-ufw.conf mode=0644
   notify:
-    - restart rsyslog
+    - Restart rsyslog
 
-- name: ensure /etc/logrotate.d exists
+- name: Ensure /etc/logrotate.d exists
   ansible.builtin.file: dest=/etc/logrotate.d state=directory mode=0755
 
-- name: add logrotate configuration for ufw.log
+- name: Add logrotate configuration for ufw.log
   ansible.builtin.template: src=logrotate-ufw.j2 dest=/etc/logrotate.d/ufw mode=0644

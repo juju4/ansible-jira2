@@ -11,7 +11,7 @@
     backup: yes
   register: p1
   notify:
-    - restart jira
+    - Restart jira
 
 - import_tasks: restore.yml
   when: jira_db_restorefile is defined and jira_db_restorefile|string

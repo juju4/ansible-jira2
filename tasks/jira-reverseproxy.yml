@@ -2,14 +2,14 @@
 ## https://confluence.atlassian.com/kb/proxying-atlassian-server-applications-with-apache-http-server-mod_proxy_http-806032611.html
 ## https://confluence.atlassian.com/adminjiraserver071/integrating-jira-with-apache-using-ssl-802593043.html
 
-- name: setup jira reverse-proxy configuration
+- name: Setup jira reverse-proxy configuration
   ansible.builtin.template:
     src: apache-jira.conf.j2
     dest: "{{ apache_sitedir }}/jira-vhost.conf"
     mode: '0644'
     backup: yes
   notify:
-    - restart apache
+    - Restart apache
 - name: Debian | enable jira configuration
   ansible.builtin.file:
     src: "{{ apache_sitedir }}/jira-vhost.conf"
@@ -32,7 +32,7 @@
         state: present
       register: pkg_result
       until: pkg_result is success
-      when: ansible_distribution_major_version|int < 8
+      when: ansible_distribution_major_version | int < 8
 
     - name: RedHat8+ | Ensure selinux dependencies are present
       ansible.builtin.package:
@@ -42,7 +42,7 @@
         state: present
       register: pkg_result
       until: pkg_result is success
-      when: ansible_distribution_major_version|int >= 8
+      when: ansible_distribution_major_version | int >= 8
 
     - name: RedHat | Allow apache to connect to network (selinux)
       seboolean:
@@ -50,7 +50,7 @@
         state: yes
         persistent: yes
   when: >
-    ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7 and
+    ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 7 and
     ansible_selinux.status is defined and
     ansible_selinux.status != 'disabled'
 
