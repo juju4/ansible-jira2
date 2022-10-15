@@ -96,7 +96,7 @@ jobs:
           cat /opt/atlassian/jira/current/logs/catalina.out
           ls -la /opt/atlassian/jira/current/logs/
           find /opt/atlassian/jira/current/logs/access_log.* -type f -exec tail -50 {} \;
-          find /opt/atlassian/jira/current/logs/locahost.* -type f -exec tail -50 {} \; || true
+          find /opt/atlassian/jira/current/logs/localhost.* -type f -exec tail -50 {} \; || true
           find /opt/atlassian/jira/current/logs/manager.* -type f -exec tail -50 {} \; || true
         if: ${{ always() }}
         continue-on-error: true

@@ -164,7 +164,7 @@ jobs:
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'cat /opt/atlassian/jira/current/logs/catalina.out'
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'ls -la /opt/atlassian/jira/current/logs/'
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'find /opt/atlassian/jira/current/logs/access_log.* -type f -exec tail -50 {} \;'
-          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'find /opt/atlassian/jira/current/logs/locahost.* -type f -exec tail -50 {} \;' || true
+          sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'find /opt/atlassian/jira/current/logs/localhost.* -type f -exec tail -50 {} \;' || true
           sudo kitchen exec ${{ matrix.suite }}-${{ matrix.distribution }}-${{ matrix.version2 }} -c 'find /opt/atlassian/jira/current/logs/manager.* -type f -exec tail -50 {} \;' || true
         if: ${{ always() }}
         continue-on-error: true
