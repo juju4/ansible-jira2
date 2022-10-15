@@ -14,5 +14,6 @@
 
 ## https://confluence.atlassian.com/adminjiraserver071/configuring-security-in-the-external-environment-802593075.html
 
-- import_tasks: firewall-ufw.yml
+- name: Import firewall-ufw
+  ansible.builtin.import_tasks: firewall-ufw.yml
   when: not (ansible_virtualization_type is defined and (ansible_virtualization_type == "docker"))

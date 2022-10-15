@@ -18,6 +18,7 @@
     creates: "{{ jira_keystore }}"
 
 - name: Jira_https_files_to_upload not empty
+  when: jira_https_files_to_upload != []
   block:
     - name: Create CSR
       ansible.builtin.command: >
@@ -48,9 +49,9 @@
             -storepass {{ jira_keystore_pass }}
             -file {{ jira_https_crt }}
       when: crt.stat.exists
-  when: jira_https_files_to_upload != []
 
 - name: Jira_https_files_to_upload empty
+  when: jira_https_files_to_upload == []
   block:
     - name: Generating self-signed certificate
       ansible.builtin.command: >
@@ -59,7 +60,6 @@
             -dname {{ jira_https_dname }} -noprompt
       args:
         creates: "{{ jira_https_csr }}"
-  when: jira_https_files_to_upload == []
 
 - name: Verify the certificate exists within the keystore
   ansible.builtin.shell: >
@@ -71,7 +71,8 @@
   changed_when: false
   register: keytoolcheck
 - name: Debug | keytool output
-  ansible.builtin.debug: var=keytoolcheck.stdout_lines
+  ansible.builtin.debug:
+    var: keytoolcheck.stdout_lines
 
 # - import_tasks: jira-https-server_xml1.yml
 # no alternate as done by template of reverseproxy

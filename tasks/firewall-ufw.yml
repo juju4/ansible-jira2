@@ -1,36 +1,46 @@
 ---
 
-- import_tasks: logging.yml
+- name: Import logging
+  ansible.builtin.import_tasks: logging.yml
 
 ## Centos7: requires EPEL
 - name: Install ufw
-  ansible.builtin.package: name=ufw state=present
+  ansible.builtin.package:
+    name: ufw
+    state: present
   register: pkg_result
   until: pkg_result is success
 
 - name: UFW | RedHat | requires ufw to be enabled before configuration
-  ufw: state=enabled
+  community.general.ufw:
+    state: enabled
   when: ansible_os_family == 'RedHat'
 
 - name: UFW | ensure logging medium is enabled
-  ufw: logging={{ jira_ufw_default_logging }}
+  community.general.ufw:
+    logging: "{{ jira_ufw_default_logging }}"
 
 - name: UFW | always allow ssh
-  ufw:
+  community.general.ufw:
     rule: allow
     name: "{{ ufw_ssh_rulename }}"
     log: yes
 
 - name: UFW | allow access from defined networks
-  ufw: rule=allow src={{ item }}
+  community.general.ufw:
+    rule: "allow"
+    src: "{{ item }}"
   with_items: "{{ jira_ufw_access }}"
 
 - name: UFW | allow access from defined networks - with logging
-  ufw: rule=allow src={{ item }} log=yes
+  community.general.ufw:
+    rule: "allow"
+    src: "{{ item }}"
+    log: "yes"
   with_items: "{{ jira_ufw_access_with_log }}"
 
 - name: UFW | allow incoming traffic for defined ports
-  ufw:
+  community.general.ufw:
     rule: allow
     interface: "{{ jira_ufw_if }}"
     direction: in
@@ -38,7 +48,7 @@
   with_items: "{{ jira_ufw_allow_ports_in }}"
 
 - name: UFW | allow outgoing traffic for defined ports - {{ jira_ufw_if }}
-  ufw:
+  community.general.ufw:
     rule: allow
     interface: "{{ jira_ufw_if }}"
     direction: out
@@ -47,13 +57,16 @@
   with_items: "{{ jira_ufw_allow_ports_out }}"
 
 - name: UFW | allow all outgoing traffic for defined interfaces
-  ufw: rule=allow interface={{ item }} direction=out
+  community.general.ufw:
+    rule: "allow"
+    interface: "{{ item }}"
+    direction: "out"
   with_items: "{{ jira_ufw_allow_if_out }}"
 
 ## FIXME! ansible module only affect incoming traffic, not idempotent
 ## Note: keep last, especially if you block by default
 - name: UFW | default policy (incoming)
-  ufw:
+  community.general.ufw:
     state: enabled
     direction: incoming
     policy: "{{ jira_ufw_default_policy }}"
@@ -67,9 +80,11 @@
   when: ufwstatus.stdout.find(jira_ufw_default_policy + ' (outgoing)') == -1
 
 - name: Jira UFW and VPN
+  when: jira_ufw_vpn is defined and jira_ufw_vpn != []
   block:
     - name: Check if custom ufw.service file
-      ansible.builtin.stat: path=/etc/systemd/system/ufw.service
+      ansible.builtin.stat:
+        path: /etc/systemd/system/ufw.service
       register: svc
     - name: Creating custom ufw.service
       ansible.builtin.copy:
@@ -89,4 +104,3 @@
       with_items:
         - "Wants={{ systemd_string }}"
         - "After={{ systemd_string }}"
-  when: jira_ufw_vpn is defined and jira_ufw_vpn != []

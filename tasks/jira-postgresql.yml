@@ -13,5 +13,6 @@
   notify:
     - Restart jira
 
-- import_tasks: restore.yml
+- name: Import restore
+  ansible.builtin.import_tasks: restore.yml
   when: jira_db_restorefile is defined and jira_db_restorefile|string

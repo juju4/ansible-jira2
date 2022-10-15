@@ -21,9 +21,14 @@
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: RedHat selinux
+  when: >
+    ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 7 and
+    ansible_selinux.status is defined and
+    ansible_selinux.status != 'disabled'
   block:
     - name: Debug | ansible_selinux
-      ansible.builtin.debug: var=ansible_selinux
+      ansible.builtin.debug:
+        var: ansible_selinux
     - name: RedHat7- | ensure selinux dependency is present
       ansible.builtin.yum:
         name:
@@ -45,13 +50,9 @@
       when: ansible_distribution_major_version | int >= 8
 
     - name: RedHat | Allow apache to connect to network (selinux)
-      seboolean:
+      ansible.posix.seboolean:
         name: httpd_can_network_connect
         state: yes
         persistent: yes
-  when: >
-    ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 7 and
-    ansible_selinux.status is defined and
-    ansible_selinux.status != 'disabled'
 
 # - name: Disable HTTP compression in Jira - GUI only???

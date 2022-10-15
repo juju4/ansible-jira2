@@ -6,7 +6,8 @@
     state: present
 
 - name: Check if have a jira server.xml backup
-  ansible.builtin.stat: path="{{ jira_installdir }}/conf/server.xml.orig"
+  ansible.builtin.stat:
+    path: "{{ jira_installdir }}/conf/server.xml.orig"
   register: backup
 - name: Backup jira server.xml
   ansible.builtin.copy:
@@ -17,7 +18,7 @@
   when: not backup.stat.exists
 
 - name: Reverse Proxy | Update jira context path
-  xml:
+  community.general.xml:
     path: "{{ jira_installdir }}/conf/server.xml"
     xpath: /Server/Service/Engine/Host/Context
     state: present

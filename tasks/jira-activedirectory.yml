@@ -4,4 +4,5 @@
 ## see also jira-import-crt.yml
 
 - name: INFO
-  ansible.builtin.debug: msg="Most of ActiveDirectory configuration seems to be Web UI only..."
+  ansible.builtin.debug:
+    msg: "Most of ActiveDirectory configuration seems to be Web UI only..."

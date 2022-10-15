@@ -15,13 +15,25 @@
   when: restorefile.stat.exists
 
 - name: Restore
+  when: restorefile.stat.exists and not restored.stat.exists
   block:
     - name: Ensure dest backup dir exists
-      ansible.builtin.file: "dest={{ backupdir }} state=directory mode=0700"
+      ansible.builtin.file:
+        dest: "{{ backupdir }}"
+        state: "directory"
+        mode: "0700"
     - name: Push backup file to system
-      ansible.builtin.copy: "src={{ jira_db_restorefile }} dest={{ backupdir }}/{{ jira_db_restorefile | basename }} mode=0600"
+      ansible.builtin.copy:
+        src: "{{ jira_db_restorefile }}"
+        dest: "{{ backupdir }}/{{ jira_db_restorefile | basename }}"
+        mode: "0600"
     - name: Give permissions to postgres user
-      acl: "name={{ item.n }} entity=postgres etype=user permissions={{ item.p }} state=present"
+      ansible.posix.acl:
+        name: "{{ item.n }}"
+        entity: "postgres"
+        etype: "user"
+        permissions: "{{ item.p }}"
+        state: "present"
       with_items:
         - { n: "{{ backupdir }}/{{ jira_db_restorefile | basename }}", p: "r--" }
         - { n: "{{ backupdir }}", p: "r-x" }
@@ -41,10 +53,16 @@
         name: jira
         state: started
     - name: Remove permissions to postgres user
-      acl: "name={{ item.n }} entity=postgres etype=user state=absent"
+      ansible.posix.acl:
+        name: "{{ item.n }}"
+        entity: "postgres"
+        etype: "user"
+        state: "absent"
       with_items:
         - { n: "{{ backupdir }}/{{ jira_db_restorefile | basename }}" }
         - { n: "{{ backupdir }}" }
     - name: Add restoration marker
-      ansible.builtin.file: "dest={{ backupdir }}/.psql_restore-{{ restorefile.stat.checksum }} mode=0600 state=touch"
-  when: restorefile.stat.exists and not restored.stat.exists
+      ansible.builtin.file:
+        dest: "{{ backupdir }}/.psql_restore-{{ restorefile.stat.checksum }}"
+        mode: "0600"
+        state: "touch"

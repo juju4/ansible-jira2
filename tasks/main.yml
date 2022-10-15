@@ -7,35 +7,46 @@
   ansible.builtin.include_vars: "RedHat-{{ ansible_distribution_version.split('.')[0] }}.yml"
   when: ansible_os_family == "RedHat"
 
-- import_tasks: jira-java11-fix.yml
+- name: Import jira-java11-fix
+  ansible.builtin.import_tasks: jira-java11-fix.yml
   when:
     - jira_version|string is version_compare('8.20.0', '>=')
     - (ansible_os_family == "Debian" and ansible_distribution_major_version|int >= 18) or
       (ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 8)
 
-- import_tasks: backup-restore.yml
+- name: Import backup-restore
+  ansible.builtin.import_tasks: backup-restore.yml
 
-- import_tasks: security.yml
+- name: Import security
+  ansible.builtin.import_tasks: security.yml
 
-- import_tasks: jira-postgresql.yml
+- name: Import jira-postgresql
+  ansible.builtin.import_tasks: jira-postgresql.yml
   when: jira_dbbackend is defined and jira_dbbackend == 'postgres'
 
-# - import_tasks: jira-server_xml1.yml
-- import_tasks: jira-server_xml2.yml
+# - ansible.builtin.import_tasks: jira-server_xml1.yml
+- name: Import jira-server_xml2
+  ansible.builtin.import_tasks: jira-server_xml2.yml
 
-- import_tasks: jira-reverseproxy.yml
+- name: Import jira-reverseproxy
+  ansible.builtin.import_tasks: jira-reverseproxy.yml
   when: jira_reverseproxy|bool
 
-- import_tasks: jira-https.yml
+- name: Import jira-https
+  ansible.builtin.import_tasks: jira-https.yml
   when: jira_https|bool
 
-- import_tasks: jira-import-crt.yml
+- name: Import jira-import-crt
+  ansible.builtin.import_tasks: jira-import-crt.yml
 
-- import_tasks: jira-activedirectory.yml
+- name: Import jira-activedirectory
+  ansible.builtin.import_tasks: jira-activedirectory.yml
   when: jira_link_activedirectory|bool
 
 - name: Install curl for serverspec testing
-  ansible.builtin.package: name=curl state=present
+  ansible.builtin.package:
+    name: curl
+    state: present
   register: pkg_result
   until: pkg_result is success
 
@@ -50,6 +61,7 @@
   ignore_errors: true
 
 - name: Restart 2
+  when: w1 is failed
   block:
     - name: 2nd jira restart
       ansible.builtin.service:
@@ -59,4 +71,3 @@
       ansible.builtin.wait_for:
         port: "{{ jira_int_port }}"
         delay: 15
-  when: w1 is failed
