@@ -24,11 +24,11 @@ jobs:
       ANSIBLE_CALLBACKS_ENABLED: profile_tasks
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: juju4.jira2
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.x'
       - name: Install dependencies
