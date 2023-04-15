@@ -9,7 +9,9 @@ set :backend, :exec
 #    c.formatter = 'JUnit'
 #end
 
-if (os[:family] == 'ubuntu' && os[:release] == '20.04')
+if (os[:family] == 'ubuntu' && os[:release] == '22.04')
+  set java_version = '11.0'
+elsif (os[:family] == 'ubuntu' && os[:release] == '20.04')
   set java_version = '11.0'
 elsif (os[:family] == 'ubuntu' && os[:release] == '18.04')
   set java_version = '11.0'
