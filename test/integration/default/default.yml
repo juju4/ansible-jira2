@@ -5,9 +5,10 @@
     - jira_reverseproxy: false
     # https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-core-8.20.8.tar.gz
     # https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-core-8.20.8.tar.gz.md5
+    # https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-core-9.4.5.tar.gz
     # https://jira.atlassian.com/browse/JRASERVER-63158
-    - jira_version: 8.20.13
-    - jira_archive_sha256sum: 515fca678712c88d8f0c74abe377fd0c676ddb6dc70f1fa2b91837a6b0f6ef78
+    - jira_version: 9.4.5
+    - jira_archive_sha256sum: 4cd1d20e073efad422618c29dcbb7dee797ba00ef886b8eb62eb6252acc18813
   pre_tasks:
     - name: apt | Update cache
       ansible.builtin.apt:
