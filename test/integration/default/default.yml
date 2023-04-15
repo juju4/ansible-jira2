@@ -31,5 +31,10 @@
         java_packages:
           - openjdk-11-jdk
       when: ansible_distribution == "Ubuntu" and ansible_distribution_version.split('.')[0] | int >= 22
+    - name: RedHat 9 | set fact
+      set_fact:
+        java_packages:
+          - java-11-openjdk
+      when: ansible_os_family == "RedHat" and ansible_distribution_version.split('.')[0] == '9'
   roles:
     - juju4.jira2
