@@ -21,7 +21,7 @@ jobs:
             version: 9-Stream
             version2: 9-Stream
             suite: default
-            experimental: true
+            experimental: false
           - distribution: centos
             version: 8-Stream
             version2: 8-Stream
