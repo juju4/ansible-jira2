@@ -117,13 +117,19 @@ jobs:
           set -x
           netstat -anp' || true
           ss -nlp' || true
+          systemctl -l --no-pager status jira || true
           systemctl -l --no-pager status apache2 || true
           systemctl -l --no-pager status httpd || true
           systemctl -l --no-pager status httpd-init || true
           systemctl -l --no-pager status
-          journalctl -xe --no-pager
           cat /etc/locale.conf
           localectl status
           localectl --no-pager list-locales
+        if: ${{ always() }}
+        continue-on-error: true
+      - name: After script - journalctl
+        run: |
+          set -x
+          journalctl -xe --no-pager
         if: ${{ always() }}
         continue-on-error: true
