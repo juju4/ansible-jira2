@@ -1,0 +1,12 @@
+---
+
+apacheetc: /etc/httpd
+apache_confdir: /etc/httpd/conf.d
+apache_sitedir: /etc/httpd/conf.d
+apache_svc: httpd
+
+ssl_user: root
+ssl_dir: /etc/pki/tls/certs
+ssl_privatedir: /etc/pki/tls/private
+
+ufw_ssh_rulename: SSH
