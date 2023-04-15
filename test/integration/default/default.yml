@@ -25,5 +25,11 @@
         postgresql_config_path: '/var/lib/pgsql/12/data'
         postgresql_daemon: 'postgresql-12'
       when: ansible_os_family == "RedHat" and ansible_distribution_version.split('.')[0] == '7'
+    # https://confluence.atlassian.com/adminjiraserver0904/supported-platforms-1188767570.html
+    - name: Ubuntu jammy | set fact
+      set_fact:
+        java_packages:
+            - openjdk-11-jdk
+      when: ansible_distribution == "Ubuntu" and ansible_distribution_version.split('.')[0] | int >= 22
   roles:
     - juju4.jira2
