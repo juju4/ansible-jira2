@@ -29,7 +29,7 @@
     - name: Ubuntu jammy | set fact
       set_fact:
         java_packages:
-            - openjdk-11-jdk
+          - openjdk-11-jdk
       when: ansible_distribution == "Ubuntu" and ansible_distribution_version.split('.')[0] | int >= 22
   roles:
     - juju4.jira2
