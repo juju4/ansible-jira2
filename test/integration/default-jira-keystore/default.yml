@@ -1,20 +1,21 @@
 ---
 
-- hosts: all
+- name: Test integration playbook
+  hosts: all
   vars:
-    - jira_reverseproxy: false
-    - jira_version: 8.20.8
-    - jira_archive_sha256sum: 9f4de168e3f1cafaa2ccdfcaf041a25b9970e9ac328849f4174db66fe5608ead
+    jira_reverseproxy: false
+    jira_version: 8.20.8
+    jira_archive_sha256sum: 9f4de168e3f1cafaa2ccdfcaf041a25b9970e9ac328849f4174db66fe5608ead
   pre_tasks:
     - name: Xenial+ | set fact
-      set_fact:
+      ansible.builtin.set_fact:
         # Jira 7.6.11+ supports openjdk-8 only, upcoming 8.2+ will support both openjdk-8 and 11
         # https://community.atlassian.com/t5/Agile-articles/Java-11-OpenJDK-support-update-for-Server-and-Data-Center/ba-p/967836
         java_packages:
           - openjdk-8-jdk
       when: ansible_distribution_release == 'xenial' or ansible_distribution_release == 'bionic'
     - name: RedHat7 | set fact
-      set_fact:
+      ansible.builtin.set_fact:
         java_packages:
           - java-1.8.0-openjdk
         postgresql_repo: https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm

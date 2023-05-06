@@ -32,7 +32,7 @@
       ansible.builtin.stat:
         path: "{{ jira_https_rootcert }}"
       register: rootcert
-    - name: Import root certificate
+    - name: Import root certificate  # noqa no-changed-when
       ansible.builtin.command: >
         keytool -import -alias rootCA -keystore {{ jira_keystore }}
             -storepass {{ jira_keystore_pass }} -trustcacerts
@@ -43,7 +43,7 @@
       ansible.builtin.stat:
         path: "{{ jira_https_crt }}"
       register: crt
-    - name: Import signed certificate
+    - name: Import signed certificate  # noqa no-changed-when
       ansible.builtin.command: >
         keytool -import -alias jira -keystore {{ jira_keystore }}
             -storepass {{ jira_keystore_pass }}

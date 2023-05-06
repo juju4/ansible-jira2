@@ -76,7 +76,8 @@
   register: ufwstatus
   changed_when: false
 - name: UFW | default policy (outgoing)
-  ansible.builtin.command: "ufw default {{ jira_ufw_default_policy }} outgoing"
+  ansible.builtin.command:  # noqa no-changed-when
+    cmd: "ufw default {{ jira_ufw_default_policy }} outgoing"
   when: ufwstatus.stdout.find(jira_ufw_default_policy + ' (outgoing)') == -1
 
 - name: Jira UFW and VPN

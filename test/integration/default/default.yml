@@ -1,22 +1,23 @@
 ---
 
-- hosts: all
+- name: Test integration playbook
+  hosts: all
   vars:
-    - jira_reverseproxy: false
+    jira_reverseproxy: false
     # https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-core-8.20.8.tar.gz
     # https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-core-8.20.8.tar.gz.md5
     # https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-core-9.4.5.tar.gz
     # https://jira.atlassian.com/browse/JRASERVER-63158
-    - jira_version: 9.4.5
-    - jira_archive_sha256sum: 4cd1d20e073efad422618c29dcbb7dee797ba00ef886b8eb62eb6252acc18813
+    jira_version: 9.4.5
+    jira_archive_sha256sum: 4cd1d20e073efad422618c29dcbb7dee797ba00ef886b8eb62eb6252acc18813
   pre_tasks:
-    - name: apt | Update cache
+    - name: Debian | Update cache
       ansible.builtin.apt:
         update_cache: true
         cache_valid_time: 3600
       when: ansible_os_family == "Debian"
     - name: RedHat7 | set fact
-      set_fact:
+      ansible.builtin.set_fact:
         # https://www.postgresql.org/download/linux/redhat/
         postgresql_repo: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
         postgresql_pkgnames: ['postgresql12-server']
@@ -27,12 +28,12 @@
       when: ansible_os_family == "RedHat" and ansible_distribution_version.split('.')[0] == '7'
     # https://confluence.atlassian.com/adminjiraserver0904/supported-platforms-1188767570.html
     - name: Ubuntu jammy | set fact
-      set_fact:
+      ansible.builtin.set_fact:
         java_packages:
           - openjdk-11-jdk
       when: ansible_distribution == "Ubuntu" and ansible_distribution_version.split('.')[0] | int >= 22
     - name: RedHat 9 | set fact
-      set_fact:
+      ansible.builtin.set_fact:
         java_packages:
           - java-11-openjdk
       when: ansible_os_family == "RedHat" and ansible_distribution_version.split('.')[0] == '9'

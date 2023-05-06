@@ -1,41 +1,42 @@
 ---
 
-- hosts: all
+- name: Test integration playbook
+  hosts: all
   vars:
-    - jira_reverseproxy: true
-    - jira_port: 80
-    - jira_version: 8.20.8
-    - jira_archive_sha256sum: 9f4de168e3f1cafaa2ccdfcaf041a25b9970e9ac328849f4174db66fe5608ead
+    jira_reverseproxy: true
+    jira_port: 80
+    jira_version: 8.20.8
+    jira_archive_sha256sum: 9f4de168e3f1cafaa2ccdfcaf041a25b9970e9ac328849f4174db66fe5608ead
     # geerlingguy.apache
-    - apache_mods_enabled:
-        - rewrite.load
-        - ssl.load
-        - proxy.load
-        - proxy_http.load
-        - remoteip.load
-        - ratelimit.load
-    - apache_create_vhosts: false
-    - apache_remove_default_vhost: true
+    apache_mods_enabled:
+      - rewrite.load
+      - ssl.load
+      - proxy.load
+      - proxy_http.load
+      - remoteip.load
+      - ratelimit.load
+    apache_create_vhosts: false
+    apache_remove_default_vhost: true
     # geerlingguy.postgresql
-    - postgresql_databases:
-        - name: "{{ jira_db }}"
-          lc_collate: 'C.UTF-8'
-    - postgresql_users:
-        - name: "{{ jira_db_user }}"
-          password: "{{ jira_db_userpass }}"
-          # priv: # defaults to not set
-          db: "{{ jira_db }}"
+    postgresql_databases:
+      - name: "{{ jira_db }}"
+        lc_collate: 'C.UTF-8'
+    postgresql_users:
+      - name: "{{ jira_db_user }}"
+        password: "{{ jira_db_userpass }}"
+        # priv: # defaults to not set
+        db: "{{ jira_db }}"
     # juju4.harden_apache
-    - hardenwebserver_enable_defaultssl: false
+    hardenwebserver_enable_defaultssl: false
     # manala.locales for centos (Ubuntu)
     # - manala_locales_codes_default: C.UTF-8
-    - manala_locales_codes:
-        # - C.UTF-8
-        - en_US.UTF-8
-        # - POSIX.UTF-8
+    manala_locales_codes:
+      # - C.UTF-8
+      - en_US.UTF-8
+      # - POSIX.UTF-8
   pre_tasks:
     - name: RedHat | set fact
-      set_fact:
+      ansible.builtin.set_fact:
         # geerlingguy.postgresql
         postgresql_databases:
           - name: "{{ jira_db }}"
@@ -48,14 +49,14 @@
           - POSIX.UTF-8
       when: ansible_os_family == 'RedHat'
     - name: Xenial+ | set fact
-      set_fact:
+      ansible.builtin.set_fact:
         # Jira 7.6.11+ supports openjdk-8 only, upcoming 8.2+ will support both openjdk-8 and 11
         # https://community.atlassian.com/t5/Agile-articles/Java-11-OpenJDK-support-update-for-Server-and-Data-Center/ba-p/967836
         java_packages:
           - openjdk-8-jdk
       when: ansible_distribution_release == 'xenial' or ansible_distribution_release == 'bionic'
     - name: RedHat7 | set fact
-      set_fact:
+      ansible.builtin.set_fact:
         java_packages:
           - java-1.8.0-openjdk
         postgresql_repo: https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
@@ -66,7 +67,8 @@
         postgresql_daemon: 'postgresql-9.6'
       when: ansible_os_family == "RedHat" and ansible_distribution_version.split('.')[0] == '7'
     - name: Install psycopg2-binary - avoid undefined symbol PQencryptPasswordConn
-      pip: name=psycopg2-binary
+      ansible.builtin.pip:
+        name: psycopg2-binary
       become: yes
       when: ansible_os_family == "RedHat" and ansible_distribution_version.split('.')[0] == '7'
   roles:
