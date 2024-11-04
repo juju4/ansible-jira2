@@ -38,6 +38,7 @@ jobs:
           which ansible
           ansible --version
           cd $GITHUB_WORKSPACE/$ANSIBLE_ROLE
+          [ -f get-dependencies.sh ] && sh -x get-dependencies.sh
           [ -f molecule/${SUITE}/requirements.yml ] && ansible-galaxy install -r molecule/${SUITE}/requirements.yml
           { echo '[defaults]'; echo 'callbacks_enabled = profile_tasks, timer'; echo 'roles_path = ../:/home/runner/.ansible/roles'; echo 'ansible_python_interpreter: /usr/bin/python3'; } >> ansible.cfg
       - name: Fetch central settings repository
