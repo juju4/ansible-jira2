@@ -37,5 +37,10 @@
         java_packages:
           - java-11-openjdk
       when: ansible_os_family == "RedHat" and ansible_distribution_version.split('.')[0] == '9'
+    - name: Ubuntu noble | Remove conflicting java version
+      ansible.builtin.package:
+        name: openjdk-17-jdk
+        state: absent
+      when: ansible_distribution == "Ubuntu" and ansible_distribution_version.split('.')[0] | int == 24
   roles:
     - juju4.jira2
