@@ -30,7 +30,7 @@
       ansible.builtin.debug:
         var: ansible_selinux
     - name: RedHat7- | ensure selinux dependency is present
-      ansible.builtin.yum:
+      ansible.builtin.dnf:
         name:
           - libselinux-python
           - libsemanage-python

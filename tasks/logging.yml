@@ -27,13 +27,13 @@
   ansible.builtin.file:
     dest: /etc/rsyslog.d
     state: directory
-    mode: 0755
+    mode: '0755'
 
 - name: Send ufw log to separate file through rsyslog
   ansible.builtin.template:
     src: rsyslog-ufw.conf.j2
     dest: /etc/rsyslog.d/49-ufw.conf
-    mode: 0644
+    mode: '0644'
   notify:
     - Restart rsyslog
 
@@ -41,10 +41,10 @@
   ansible.builtin.file:
     dest: /etc/logrotate.d
     state: directory
-    mode: 0755
+    mode: '0755'
 
 - name: Add logrotate configuration for ufw.log
   ansible.builtin.template:
     src: logrotate-ufw.j2
     dest: /etc/logrotate.d/ufw
-    mode: 0644
+    mode: '0644'
