@@ -1,5 +1,10 @@
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+# DEPRECATED -> to be archived soon
+
 [![Actions Status - Master](https://github.com/juju4/ansible-jira2/workflows/AnsibleCI/badge.svg)](https://github.com/juju4/ansible-jira2/actions?query=branch%3Amaster)
 [![Actions Status - Devel](https://github.com/juju4/ansible-jira2/workflows/AnsibleCI/badge.svg?branch=devel)](https://github.com/juju4/ansible-jira2/actions?query=branch%3Adevel)
+
+[Jira Server is not supported since Feb 2024. Last release is 9.12.14. Only DataCenter or Cloud license are available after.](https://www.atlassian.com/software/jira/download-archives). Also, some ansible roles below are not supported anymore.
 
 # Jira ansible role
 
