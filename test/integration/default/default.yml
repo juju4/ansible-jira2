@@ -8,8 +8,8 @@
     # https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-core-8.20.8.tar.gz.md5
     # https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-core-9.4.5.tar.gz
     # https://jira.atlassian.com/browse/JRASERVER-63158
-    jira_version: 9.4.5
-    jira_archive_sha256sum: 4cd1d20e073efad422618c29dcbb7dee797ba00ef886b8eb62eb6252acc18813
+    jira_version: 9.12.14
+    jira_archive_sha256sum: d50f2b7793bd16347be8b1db13789ad63a5f42d864d068ef70cc6fa686d8411e
   pre_tasks:
     - name: Debian | Update cache
       ansible.builtin.apt:
